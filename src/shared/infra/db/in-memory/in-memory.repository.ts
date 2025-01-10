@@ -71,12 +71,14 @@ export abstract class InMemorySearchableRepository<E extends Entity, EntityId ex
         }
 
         return [...items].sort((a, b) => {
+            console.log('A => ', a)
+            console.log('B => ', b)
             //@ts-ignore
-            if(a[sort] < b.props[sort]) {
+            if(a[sort] < b[sort]) {
                 return sort_dir === 'asc' ? -1 : 1;
             }
             //@ts-ignore
-            if(a.props[sort] > b.props[sort]) {
+            if(a[sort] > b[sort]) {
                 return sort_dir === 'asc' ? 1 : -1;
             }
             return 0;
