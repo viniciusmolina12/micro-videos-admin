@@ -6,7 +6,4 @@ export class CategoryInMemoryRepository extends InMemoryRepository<Category, Uui
     getEntity(): new (...args: any[]) => Category {
         return Category;
     }
-
-    
-    
 }
