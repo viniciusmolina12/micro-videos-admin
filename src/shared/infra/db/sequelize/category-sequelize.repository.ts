@@ -7,16 +7,18 @@ import { CategoryModel } from "./category.model";
 import { CategoryModelMapper } from "./category-model-mapper";
 
 export class CategorySequelizeRepository implements ICategoryRepository {
-    sortableFields: string[];
+    sortableFields: string[] = ["name", "created_at"];
     constructor(private categoryModel: typeof CategoryModel) {}
 
     async insert(entity: Category): Promise<void> {
+        
         const model = CategoryModelMapper.toModel(entity);
-        await this.categoryModel.create(model);
+        console.log('Model: ', model);
+        await this.categoryModel.create(model.toJSON());
     }
 
     async bulkInsert(entities: Category[]): Promise<void> {
-        const models = entities.map(entity => CategoryModelMapper.toModel(entity));
+        const models = entities.map(entity => CategoryModelMapper.toModel(entity).toJSON());
         await this.categoryModel.bulkCreate(models);
     }
 
@@ -68,13 +70,7 @@ export class CategorySequelizeRepository implements ICategoryRepository {
         })
 
         return new CategorySearchResult( {
-            items: models.map(model => new Category({
-                category_id: new Uuid(model.category_id),
-                name: model.name,
-                description: model.description,
-                is_active: model.is_active,
-                created_at: model.created_at
-            })),
+            items: models.map(model => CategoryModelMapper.toEntity(model)),
             total: count,
             current_page: props.page,
             per_page: props.per_page,
