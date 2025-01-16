@@ -13,7 +13,6 @@ export class CategorySequelizeRepository implements ICategoryRepository {
     async insert(entity: Category): Promise<void> {
         
         const model = CategoryModelMapper.toModel(entity);
-        console.log('Model: ', model);
         await this.categoryModel.create(model.toJSON());
     }
 

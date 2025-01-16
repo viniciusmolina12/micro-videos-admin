@@ -3,18 +3,10 @@ import { Category } from '../../../../../category/domain/category.entity';
 import { Uuid } from '../../../../domain/value-objects/uuid.vo';
 import { CategoryModel } from '../category.model';
 import { CategoryModelMapper } from '../category-model-mapper';
+import { setupSequelize } from '../../../testing/helpers';
 
 describe('CategoryModelMapper Integration Tests', () => {
-    let sequelize;
-    beforeEach(async () => {
-      sequelize = new Sequelize({ 
-          dialect: 'sqlite',
-          storage: ':memory:',
-          models: [CategoryModel],
-          logging: false,
-      })
-      await sequelize.sync();
-    })
+ setupSequelize({models: [CategoryModel]});
   it('should convert a category model to a category aggregate', () => {
     const created_at = new Date();
     const model = CategoryModel.build({

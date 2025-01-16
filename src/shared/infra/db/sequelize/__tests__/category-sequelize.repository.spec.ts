@@ -6,20 +6,11 @@ import { NotFoundError } from '../../../../../shared/domain/errors/not-found.err
 import { CategoryModelMapper } from '../category-model-mapper';
 import { CategorySearchParams, CategorySearchResult } from '../../../../../category/domain/category.repository';
 import { Sequelize } from 'sequelize-typescript';
+import { setupSequelize } from '../../../testing/helpers';
 
 describe('CategorySequelizeRepository Integration Test', () => {
   let repository: CategorySequelizeRepository;
-;
-  let sequelize;
-  beforeEach(async () => {
-    sequelize = new Sequelize({ 
-        dialect: 'sqlite',
-        storage: ':memory:',
-        models: [CategoryModel],
-        logging: false,
-    })
-    await sequelize.sync();
-  })
+  setupSequelize({ models: [CategoryModel]});
 
   beforeEach(async () => {
     repository = new CategorySequelizeRepository(CategoryModel);
