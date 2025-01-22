@@ -1,8 +1,8 @@
-import { Uuid } from '../../../../shared/domain/value-objects/uuid.vo';
-import { CategorySequelizeRepository } from '../../../../shared/infra/db/sequelize/category-sequelize.repository';
-import { CategoryModel } from '../../../../shared/infra/db/sequelize/category.model';
+import { Uuid } from '../../../../../shared/domain/value-objects/uuid.vo';
+import { CategorySequelizeRepository } from '../../../../../shared/infra/db/sequelize/category-sequelize.repository';
+import { CategoryModel } from '../../../../../shared/infra/db/sequelize/category.model';
 
-import { setupSequelize } from '../../../../shared/infra/testing/helpers';
+import { setupSequelize } from '../../../../../shared/infra/testing/helpers';
 import { CreateCategoryUseCase } from '../../create-category.usecase';
 
 describe('CreateCategoryUseCase Integration Tests', () => {
