@@ -2,8 +2,8 @@ import { CategorySequelizeRepository } from "../../../../../shared/infra/db/sequ
 import { CategoryModel } from "../../../../../shared/infra/db/sequelize/category.model";
 import { setupSequelize } from "../../../../../shared/infra/testing/helpers";
 import { Category } from "../../../../domain/category.entity";
-import { ListCategoryUseCase } from "../../list-category.usecase";
-import { CategoryOutputMapper } from "../../shared/category-output";
+import { CategoryOutputMapper } from "../../@shared/category-output";
+import { ListCategoryUseCase } from "../list-category.usecase";
 
 describe('ListCategoriesUseCase Integration Tests', () => {
   let useCase: ListCategoryUseCase;

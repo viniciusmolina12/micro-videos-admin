@@ -1,8 +1,8 @@
-import { PaginationOutput, PaginationOutputMapper } from '../../../shared/application/pagination-output';
-import { IUseCase } from '../../../shared/application/use-case.interface';
-import { SortDirection } from '../../../shared/domain/repository/search-params';
-import { CategoryFilter, CategorySearchParams, CategorySearchResult, ICategoryRepository } from '../../domain/category.repository';
-import { CategoryOutput, CategoryOutputMapper } from './shared/category-output';
+import { PaginationOutput, PaginationOutputMapper } from '../../../../shared/application/pagination-output';
+import { IUseCase } from '../../../../shared/application/use-case.interface';
+import { SortDirection } from '../../../../shared/domain/repository/search-params';
+import { CategoryFilter, CategorySearchParams, CategorySearchResult, ICategoryRepository } from '../../../domain/category.repository';
+import { CategoryOutput, CategoryOutputMapper } from '../@shared/category-output';
  
   
   export class ListCategoryUseCase

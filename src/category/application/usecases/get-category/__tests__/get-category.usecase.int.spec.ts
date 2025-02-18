@@ -4,7 +4,7 @@ import { CategorySequelizeRepository } from '../../../../../shared/infra/db/sequ
 import { CategoryModel } from '../../../../../shared/infra/db/sequelize/category.model';
 import { setupSequelize } from '../../../../../shared/infra/testing/helpers';
 import { Category } from '../../../../domain/category.entity';
-import { GetCategoryUseCase } from '../../get-category.usecase';
+import { GetCategoryUseCase } from '../get-category.usecase';
 describe('GetCategoryUseCase Integration Tests', () => {
   let useCase: GetCategoryUseCase;
   let repository: CategorySequelizeRepository;

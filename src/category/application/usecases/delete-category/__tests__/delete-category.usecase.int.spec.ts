@@ -4,7 +4,7 @@ import { CategorySequelizeRepository } from "../../../../../shared/infra/db/sequ
 import { CategoryModel } from "../../../../../shared/infra/db/sequelize/category.model";
 import { setupSequelize } from "../../../../../shared/infra/testing/helpers";
 import { Category } from "../../../../domain/category.entity";
-import { DeleteCategoryUseCase } from "../../delete-category.usecase";
+import { DeleteCategoryUseCase } from "../delete-category.usecase";
 
 describe('DeleteCategoryUseCase Integration Tests', () => {
   let useCase: DeleteCategoryUseCase;

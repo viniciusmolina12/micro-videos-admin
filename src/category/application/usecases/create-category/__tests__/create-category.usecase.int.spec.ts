@@ -3,7 +3,7 @@ import { CategorySequelizeRepository } from '../../../../../shared/infra/db/sequ
 import { CategoryModel } from '../../../../../shared/infra/db/sequelize/category.model';
 
 import { setupSequelize } from '../../../../../shared/infra/testing/helpers';
-import { CreateCategoryUseCase } from '../../create-category.usecase';
+import { CreateCategoryUseCase } from '../../create-category/create-category.usecase';
 
 describe('CreateCategoryUseCase Integration Tests', () => {
   let useCase: CreateCategoryUseCase;
