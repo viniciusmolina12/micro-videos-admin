@@ -3,7 +3,7 @@ import { EntityValidationError } from "../../domain/validators/validation.error"
 import { FieldsErrors } from "../../domain/validators/validator-fields-interface";
 
 type Expected = | {
-    validator: ClassValidatorFields<any>;
+    validator: ClassValidatorFields;
     data: any;
 } | (() => any)
 
