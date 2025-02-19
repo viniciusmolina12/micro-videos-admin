@@ -1,4 +1,3 @@
-import { Sequelize } from 'sequelize-typescript';
 import { Category } from '../../../../../category/domain/category.entity';
 import { Uuid } from '../../../../domain/value-objects/uuid.vo';
 import { CategoryModel } from '../category.model';
@@ -6,7 +5,7 @@ import { CategoryModelMapper } from '../category-model-mapper';
 import { setupSequelize } from '../../../testing/helpers';
 
 describe('CategoryModelMapper Integration Tests', () => {
- setupSequelize({models: [CategoryModel]});
+  setupSequelize({ models: [CategoryModel] });
   it('should convert a category model to a category aggregate', () => {
     const created_at = new Date();
     const model = CategoryModel.build({
@@ -30,14 +29,13 @@ describe('CategoryModelMapper Integration Tests', () => {
 
   it('should convert category entity to category model', () => {
     const created_at = new Date();
-    const entity = Category
-        .fake()
-        .aCategory()
-        .withCategoryId(new Uuid('5490020a-e866-4229-9adc-aa44b83234c4'))
-        .withCreatedAt(created_at)
-        .withDescription('some description')
-        .withName('some value')
-        .build();
+    const entity = Category.fake()
+      .aCategory()
+      .withCategoryId(new Uuid('5490020a-e866-4229-9adc-aa44b83234c4'))
+      .withCreatedAt(created_at)
+      .withDescription('some description')
+      .withName('some value')
+      .build();
     const model = CategoryModelMapper.toModel(entity);
     expect(model.toJSON()).toStrictEqual({
       category_id: '5490020a-e866-4229-9adc-aa44b83234c4',
@@ -46,5 +44,5 @@ describe('CategoryModelMapper Integration Tests', () => {
       is_active: true,
       created_at,
     });
-  })
+  });
 });

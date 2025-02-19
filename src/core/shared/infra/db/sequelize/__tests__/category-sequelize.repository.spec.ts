@@ -4,13 +4,15 @@ import { Category } from '../../../../../category/domain/category.entity';
 import { Uuid } from '../../../../domain/value-objects/uuid.vo';
 import { NotFoundError } from '../../../../../shared/domain/errors/not-found.error';
 import { CategoryModelMapper } from '../category-model-mapper';
-import { CategorySearchParams, CategorySearchResult } from '../../../../../category/domain/category.repository';
-import { Sequelize } from 'sequelize-typescript';
+import {
+  CategorySearchParams,
+  CategorySearchResult,
+} from '../../../../../category/domain/category.repository';
 import { setupSequelize } from '../../../testing/helpers';
 
 describe('CategorySequelizeRepository Integration Test', () => {
   let repository: CategorySequelizeRepository;
-  setupSequelize({ models: [CategoryModel]});
+  setupSequelize({ models: [CategoryModel] });
 
   beforeEach(async () => {
     repository = new CategorySequelizeRepository(CategoryModel);
