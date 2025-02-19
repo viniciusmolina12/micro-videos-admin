@@ -1,9 +1,11 @@
-import { NotFoundError } from "../../../../../shared/domain/errors/not-found.error";
-import { InvalidUuidError, Uuid } from "../../../../../shared/domain/value-objects/uuid.vo";
-import { CategoryInMemoryRepository } from "../../../../../shared/infra/db/in-memory/category/category-in-memory.repository";
-import { Category } from "../../../../domain/category.entity";
-import { DeleteCategoryUseCase } from "../delete-category.usecase";
-
+import { NotFoundError } from '../../../../../shared/domain/errors/not-found.error';
+import {
+  InvalidUuidError,
+  Uuid,
+} from '../../../../../shared/domain/value-objects/uuid.vo';
+import { CategoryInMemoryRepository } from '../../../../../shared/infra/db/in-memory/category/category-in-memory.repository';
+import { Category } from '../../../../domain/category.entity';
+import { DeleteCategoryUseCase } from '../delete-category.usecase';
 
 describe('DeleteCategoryUseCase Unit Tests', () => {
   let useCase: DeleteCategoryUseCase;

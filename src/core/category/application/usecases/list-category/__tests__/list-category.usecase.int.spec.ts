@@ -1,9 +1,9 @@
-import { CategorySequelizeRepository } from "../../../../../shared/infra/db/sequelize/category-sequelize.repository";
-import { CategoryModel } from "../../../../../shared/infra/db/sequelize/category.model";
-import { setupSequelize } from "../../../../../shared/infra/testing/helpers";
-import { Category } from "../../../../domain/category.entity";
-import { CategoryOutputMapper } from "../../@shared/category-output";
-import { ListCategoryUseCase } from "../list-category.usecase";
+import { CategorySequelizeRepository } from '../../../../../shared/infra/db/sequelize/category-sequelize.repository';
+import { CategoryModel } from '../../../../../shared/infra/db/sequelize/category.model';
+import { setupSequelize } from '../../../../../shared/infra/testing/helpers';
+import { Category } from '../../../../domain/category.entity';
+import { CategoryOutputMapper } from '../../@shared/category-output';
+import { ListCategoryUseCase } from '../list-category.usecase';
 
 describe('ListCategoriesUseCase Integration Tests', () => {
   let useCase: ListCategoryUseCase;
@@ -24,10 +24,10 @@ describe('ListCategoriesUseCase Integration Tests', () => {
 
     await repository.bulkInsert(categories);
     const output = await useCase.execute({});
-    console.log('categories!!', categories)
-    console.log('output!!', output)
+    console.log('categories!!', categories);
+    console.log('output!!', output);
     const teste = [...categories].reverse().map(CategoryOutputMapper.toOutput);
-    console.log('teste!!', teste)
+    console.log('teste!!', teste);
     expect(output).toEqual({
       items: [...categories].reverse().map(CategoryOutputMapper.toOutput),
       total: 2,
