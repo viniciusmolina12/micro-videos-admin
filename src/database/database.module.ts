@@ -10,8 +10,8 @@ const models = [CategoryModel];
       host: ':memory:',
       logging: false,
       models,
+      autoLoadModels: true,
     }),
-    // SequelizeModule.forFeature([CategoryModel]),
   ],
 })
 export class DatabaseModule {}
