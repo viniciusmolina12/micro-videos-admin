@@ -40,10 +40,11 @@ export const CONFIG_DB_SCHEMA: Joi.StrictSchemaMap<DB_SCHEMA_TYPE> = {
   DB_AUTO_LOAD_MODELS: Joi.boolean().required(),
 };
 
+export type CONFIG_SCHEMA_TYPE = DB_SCHEMA_TYPE;
+
 @Module({})
 export class ConfigModule extends NestConfigModule {
   static forRoot(options: ConfigModuleOptions = {}) {
-    console.log(join(process.cwd(), 'envs', `.env.${process.env.NODE_ENV}`));
     return super.forRoot({
       ...options,
       isGlobal: true,
