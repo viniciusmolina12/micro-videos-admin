@@ -16,7 +16,6 @@ export class CategoriesController {
   constructor(
     private readonly categoryRepository: CategorySequelizeRepository,
   ) {
-    console.log(this.categoryRepository);
   }
 
   @Post()

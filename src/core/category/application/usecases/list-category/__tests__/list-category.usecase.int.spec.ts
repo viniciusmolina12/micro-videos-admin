@@ -24,10 +24,7 @@ describe('ListCategoriesUseCase Integration Tests', () => {
 
     await repository.bulkInsert(categories);
     const output = await useCase.execute({});
-    console.log('categories!!', categories);
-    console.log('output!!', output);
     const teste = [...categories].reverse().map(CategoryOutputMapper.toOutput);
-    console.log('teste!!', teste);
     expect(output).toEqual({
       items: [...categories].reverse().map(CategoryOutputMapper.toOutput),
       total: 2,
