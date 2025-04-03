@@ -45,19 +45,23 @@ export type CONFIG_SCHEMA_TYPE = DB_SCHEMA_TYPE;
 @Module({})
 export class ConfigModule extends NestConfigModule {
   static forRoot(options: ConfigModuleOptions = {}) {
+    const envFilePath =[
+      join(process.cwd(), 'envs', `.env.${process.env.NODE_ENV}`),
+      join(process.cwd(), 'envs', `.env`),
+      ...(Array.isArray(options.envFilePath)
+      ? options.envFilePath
+      : [options.envFilePath]),
+    ];
+
+      console.log('env files paths', envFilePath);
+
     return super.forRoot({
-      ...options,
       isGlobal: true,
-      envFilePath: [
-        ...(Array.isArray(options.envFilePath)
-          ? options.envFilePath
-          : [options.envFilePath]),
-        join(process.cwd(), 'envs', `.env.${process.env.NODE_ENV}`),
-        join(process.cwd(), 'envs', `.env`),
-      ],
+      envFilePath,
       validationSchema: Joi.object({
         ...CONFIG_DB_SCHEMA,
       }),
+      ...options,
     });
   }
 }
