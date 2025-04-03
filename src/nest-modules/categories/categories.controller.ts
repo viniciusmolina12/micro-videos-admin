@@ -9,6 +9,7 @@ import {
   Inject,
   ParseUUIDPipe,
   HttpCode,
+  Query,
 } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
@@ -16,9 +17,16 @@ import { CreateCategoryUseCase } from '@core/category/application/usecases/creat
 import { UpdateCategoryUseCase } from '@core/category/application/usecases/update-category/update-category.usecase';
 import { DeleteCategoryUseCase } from '@core/category/application/usecases/delete-category/delete-category.usecase';
 import { GetCategoryUseCase } from '@core/category/application/usecases/get-category/get-category.usecase';
-import { ListCategoryUseCase } from '@core/category/application/usecases/list-category/list-category.usecase';
-import { CategoryPresenter } from './categories.presenter';
+import {
+  ListCategoriesInput,
+  ListCategoryUseCase,
+} from '@core/category/application/usecases/list-category/list-category.usecase';
+import {
+  CategoryCollectionPresenter,
+  CategoryPresenter,
+} from './categories.presenter';
 import { CategoryOutput } from '@core/category/application/usecases/@shared/category-output';
+import { SearchCategoriesDto } from './dto/search-categories.dto';
 
 @Controller('categories')
 export class CategoriesController {
@@ -44,7 +52,10 @@ export class CategoriesController {
   }
 
   @Get()
-  findAll() {}
+  async search(@Query() searchParamsDto: SearchCategoriesDto) {
+    const output = await this.listUseCase.execute(searchParamsDto);
+    return new CategoryCollectionPresenter(output);
+  }
 
   @Get(':id')
   findOne(@Param('id') id: string) {}
