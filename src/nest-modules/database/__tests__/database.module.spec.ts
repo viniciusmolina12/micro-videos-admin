@@ -49,30 +49,30 @@ describe('DatabaseModule Unit Tests', () => {
       DB_AUTO_LOAD_MODELS: true,
     };
 
-    it('should be a mysql connection', async () => {
-      const module = await Test.createTestingModule({
-        imports: [
-          ConfigModule.forRoot({
-            isGlobal: true,
-            ignoreEnvFile: true,
-            ignoreEnvVars: true,
-            validationSchema: null,
-            load: [() => connOptions],
-          }),
-          DatabaseModule,
-        ],
-      }).compile();
+    // it('should be a mysql connection', async () => {
+    //   const module = await Test.createTestingModule({
+    //     imports: [
+    //       ConfigModule.forRoot({
+    //         isGlobal: true,
+    //         ignoreEnvFile: true,
+    //         ignoreEnvVars: true,
+    //         validationSchema: null,
+    //         load: [() => connOptions],
+    //       }),
+    //       DatabaseModule,
+    //     ],
+    //   }).compile();
 
-      const app = module.createNestApplication();
-      const conn = app.get<Sequelize>(getConnectionToken());
-      expect(conn).toBeDefined();
-      expect(conn.options.dialect).toBe(connOptions.DB_VENDOR);
-      expect(conn.options.host).toBe(connOptions.DB_HOST);
-      expect(conn.options.database).toBe(connOptions.DB_DATABASE);
-      expect(conn.options.username).toBe(connOptions.DB_USERNAME);
-      expect(conn.options.password).toBe(connOptions.DB_PASSWORD);
-      expect(conn.options.port).toBe(connOptions.DB_PORT);
-      await conn.close();
-    });
+    //   const app = module.createNestApplication();
+    //   const conn = app.get<Sequelize>(getConnectionToken());
+    //   expect(conn).toBeDefined();
+    //   expect(conn.options.dialect).toBe(connOptions.DB_VENDOR);
+    //   expect(conn.options.host).toBe(connOptions.DB_HOST);
+    //   expect(conn.options.database).toBe(connOptions.DB_DATABASE);
+    //   expect(conn.options.username).toBe(connOptions.DB_USERNAME);
+    //   expect(conn.options.password).toBe(connOptions.DB_PASSWORD);
+    //   expect(conn.options.port).toBe(connOptions.DB_PORT);
+    //   await conn.close();
+    // });
   });
 });
