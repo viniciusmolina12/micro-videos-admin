@@ -1,9 +1,103 @@
-// import { Uuid } from "../../../shared/domain/value-objects/uuid.vo";
-// import { Category } from "../category.entity";
+import { Uuid } from '../../../shared/domain/value-objects/uuid.vo';
+import { Category } from '../category.entity';
 
-test('test', () => {
-  expect(1).toBe(1);
-})
+describe('Category Entity Unit Tests', () => {
+  describe('constructor', () => {
+    it('deve criar uma categoria com valores padrão', () => {
+      const category = new Category({
+        name: 'Movie',
+      });
+
+      expect(category.category_id).toBeInstanceOf(Uuid);
+      expect(category.name).toBe('Movie');
+      expect(category.description).toBeNull();
+      expect(category.is_active).toBe(true);
+      expect(category.created_at).toBeInstanceOf(Date);
+    });
+
+    it('deve criar uma categoria com todos os valores', () => {
+      const created_at = new Date();
+      const category_id = new Uuid();
+      const category = new Category({
+        category_id,
+        name: 'Movie',
+        description: 'Movie description',
+        is_active: false,
+        created_at,
+      });
+
+      expect(category.category_id).toBe(category_id);
+      expect(category.name).toBe('Movie');
+      expect(category.description).toBe('Movie description');
+      expect(category.is_active).toBe(false);
+      expect(category.created_at).toBe(created_at);
+    });
+  });
+
+  describe('create method', () => {
+    it('deve criar uma categoria usando o método create', () => {
+      const category = Category.create({
+        name: 'Movie',
+        description: 'Movie description',
+      });
+
+      expect(category.category_id).toBeInstanceOf(Uuid);
+      expect(category.name).toBe('Movie');
+      expect(category.description).toBe('Movie description');
+      expect(category.is_active).toBe(true);
+      expect(category.created_at).toBeInstanceOf(Date);
+    });
+  });
+
+  describe('métodos de mudança', () => {
+    it('deve mudar o nome', () => {
+      const category = Category.create({ name: 'Movie' });
+      category.changeName('Movie Updated');
+      expect(category.name).toBe('Movie Updated');
+    });
+
+    it('deve mudar a descrição', () => {
+      const category = Category.create({ name: 'Movie' });
+      category.changeDescription('New description');
+      expect(category.description).toBe('New description');
+    });
+
+    it('deve ativar a categoria', () => {
+      const category = Category.create({ name: 'Movie', is_active: false });
+      category.activate();
+      expect(category.is_active).toBe(true);
+    });
+
+    it('deve desativar a categoria', () => {
+      const category = Category.create({ name: 'Movie' });
+      category.deactivate();
+      expect(category.is_active).toBe(false);
+    });
+  });
+
+  describe('toJSON', () => {
+    it('deve retornar os dados da categoria em formato JSON', () => {
+      const created_at = new Date();
+      const category_id = new Uuid();
+      const category = new Category({
+        category_id,
+        name: 'Movie',
+        description: 'Movie description',
+        is_active: true,
+        created_at,
+      });
+
+      expect(category.toJSON()).toEqual({
+        category_id: category_id.id,
+        name: 'Movie',
+        description: 'Movie description',
+        is_active: true,
+        created_at: created_at,
+      });
+    });
+  });
+});
+
 // describe.skip("Category Unit Tests", () => {
 //   let validateSpy: any;
 //   beforeEach(() => {
