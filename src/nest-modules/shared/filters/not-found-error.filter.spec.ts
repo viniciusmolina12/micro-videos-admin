@@ -49,7 +49,7 @@ describe('NotFoundFilter E2E Tests', () => {
     return request(server).get('/stub').expect(404).expect({
       statusCode: 404,
       error: 'Not Found',
-      message: 'StubEntity Not found usind ID fake-id',
+      message: 'StubEntity Not found using ID fake-id',
     });
   });
 });

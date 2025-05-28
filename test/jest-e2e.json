@@ -1,9 +1,14 @@
 {
+  "testRegex": ".e2e-spec.ts$",
+  "clearMocks": true,
   "moduleFileExtensions": ["js", "json", "ts"],
   "rootDir": ".",
   "testEnvironment": "node",
-  "testRegex": ".e2e-spec.ts$",
   "transform": {
-    "^.+\\.(t|j)s$": "ts-jest"
-  }
+    "^.+\\.(t|j)s$": "@swc/jest"
+  },
+  "coverageProvider": "v8",
+  "coverageReporters": ["text", "lcov"],
+  "coverageDirectory": "coverage",
+  "setupFilesAfterEnv": ["./jest-setup.ts"]
 }
