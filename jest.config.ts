@@ -26,7 +26,25 @@ const config: Config = {
 
   // The directory where Jest should output its coverage files
   coverageDirectory: 'coverage',
-
+  coveragePathIgnorePatterns: [
+    '/node_modules/',
+    '.interface.ts',
+    'shared/testing',
+    'shared-module/testing',
+    'validator.rules.ts',
+    '-fixture.ts',
+    '.input.ts',
+    '/coverage',
+    '.d.ts',
+  ],
+  coverageThreshold: {
+    global: {
+      branches: 80,
+      functions: 80,
+      lines: 80,
+      statements: 80,
+    },
+  },
   // An array of regexp pattern strings used to skip coverage collection
   // coveragePathIgnorePatterns: [
   //   "/node_modules/"
