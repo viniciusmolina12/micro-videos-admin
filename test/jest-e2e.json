@@ -1,5 +1,5 @@
 {
-  "testRegex": ".e2e-spec.ts$",
+  "testRegex": ".e2e.spec.ts$",
   "clearMocks": true,
   "moduleFileExtensions": ["js", "json", "ts"],
   "rootDir": ".",
