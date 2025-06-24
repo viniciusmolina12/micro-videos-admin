@@ -1,5 +1,5 @@
 import { Op } from 'sequelize';
-import { Category } from '../../../../category/domain/category.entity';
+import { Category } from '../../../../category/domain/category.aggregate';
 import {
   CategorySearchParams,
   CategorySearchResult,

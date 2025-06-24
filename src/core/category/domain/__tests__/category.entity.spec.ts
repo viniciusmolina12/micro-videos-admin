@@ -1,5 +1,5 @@
 import { Uuid } from '../../../shared/domain/value-objects/uuid.vo';
-import { Category } from '../category.entity';
+import { Category } from '../category.aggregate';
 
 describe('Category Entity Unit Tests', () => {
   describe('constructor', () => {
