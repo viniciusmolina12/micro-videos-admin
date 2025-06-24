@@ -6,8 +6,9 @@ import { GetCategoryFixture } from 'src/nest-modules/categories/__tests__/testin
 import { CategoriesController } from 'src/nest-modules/categories/categories.controller';
 import { CategoryOutputMapper } from '@core/category/application/usecases/@shared/category-output';
 import { Category } from '@core/category/domain/category.aggregate';
+import { CategoryId } from '@core/category/domain/value-objects/category-id.vo';
 import * as CategoryProviders from '../../src/nest-modules/categories/categories.providers';
-import { Uuid } from '@core/shared/domain/value-objects/uuid.vo';
+
 describe('CategoriesController (e2e)', () => {
   const nestApp = startApp();
   describe('/categories/:id (GET)', () => {
@@ -46,7 +47,7 @@ describe('CategoriesController (e2e)', () => {
     //   );
     //   const category = Category.fake()
     //     .aCategory()
-    //     .withCategoryId(new Uuid())
+    //     .withCategoryId(new CategoryId())
     //     .build();
     //   console.log('CATEGORY', category);
     //   await categoryRepo.insert(category);

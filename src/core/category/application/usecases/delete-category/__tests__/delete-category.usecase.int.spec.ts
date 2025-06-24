@@ -1,10 +1,10 @@
-import { NotFoundError } from '../../../../../shared/domain/errors/not-found.error';
-import { Uuid } from '../../../../../shared/domain/value-objects/uuid.vo';
+import { CategoryId } from '../../../../domain/value-objects/category-id.vo';
 import { CategorySequelizeRepository } from '../../../../../shared/infra/db/sequelize/category-sequelize.repository';
 import { CategoryModel } from '../../../../../shared/infra/db/sequelize/category.model';
 import { setupSequelize } from '../../../../../shared/infra/testing/helpers';
-import { Category } from '../../../../domain/category.aggregate';
 import { DeleteCategoryUseCase } from '../delete-category.usecase';
+import { NotFoundError } from '../../../../../shared/domain/errors/not-found.error';
+import { Category } from '../../../../domain/category.aggregate';
 
 describe('DeleteCategoryUseCase Integration Tests', () => {
   let useCase: DeleteCategoryUseCase;
@@ -18,7 +18,7 @@ describe('DeleteCategoryUseCase Integration Tests', () => {
   });
 
   it('should throws error when entity not found', async () => {
-    const categoryId = new Uuid();
+    const categoryId = new CategoryId();
     await expect(() => useCase.execute({ id: categoryId.id })).rejects.toThrow(
       new NotFoundError(categoryId.id, Category),
     );
@@ -27,9 +27,12 @@ describe('DeleteCategoryUseCase Integration Tests', () => {
   it('should delete a category', async () => {
     const category = Category.fake().aCategory().build();
     await repository.insert(category);
+
     await useCase.execute({
       id: category.category_id.id,
     });
-    await expect(repository.findById(category.category_id)).resolves.toBeNull();
+
+    const noHasModel = await CategoryModel.findByPk(category.category_id.id);
+    expect(noHasModel).toBeNull();
   });
 });

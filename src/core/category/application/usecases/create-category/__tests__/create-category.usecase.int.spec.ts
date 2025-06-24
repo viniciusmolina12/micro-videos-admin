@@ -1,4 +1,4 @@
-import { Uuid } from '../../../../../shared/domain/value-objects/uuid.vo';
+import { CategoryId } from '../../../../domain/value-objects/category-id.vo';
 import { CategorySequelizeRepository } from '../../../../../shared/infra/db/sequelize/category-sequelize.repository';
 import { CategoryModel } from '../../../../../shared/infra/db/sequelize/category.model';
 
@@ -17,8 +17,11 @@ describe('CreateCategoryUseCase Integration Tests', () => {
   });
 
   it('should create a category', async () => {
-    let output = await useCase.execute({ name: 'test' });
-    let entity = await repository.findById(new Uuid(output.id));
+    const output = await useCase.execute({
+      name: 'test',
+    });
+
+    const entity = await repository.findById(new CategoryId(output.id));
     expect(output).toStrictEqual({
       id: entity!.category_id.id,
       name: 'test',
@@ -27,11 +30,22 @@ describe('CreateCategoryUseCase Integration Tests', () => {
       created_at: entity!.created_at,
     });
 
-    output = await useCase.execute({
+    expect(entity!.toJSON()).toStrictEqual({
+      category_id: entity!.category_id.id,
+      name: 'test',
+      description: null,
+      is_active: true,
+      created_at: entity!.created_at,
+    });
+  });
+
+  it('should create a category with description', async () => {
+    const output = await useCase.execute({
       name: 'test',
       description: 'some description',
     });
-    entity = await repository.findById(new Uuid(output.id));
+
+    const entity = await repository.findById(new CategoryId(output.id));
     expect(output).toStrictEqual({
       id: entity!.category_id.id,
       name: 'test',
@@ -40,30 +54,34 @@ describe('CreateCategoryUseCase Integration Tests', () => {
       created_at: entity!.created_at,
     });
 
-    output = await useCase.execute({
-      name: 'test',
-      description: 'some description',
-      is_active: true,
-    });
-    entity = await repository.findById(new Uuid(output.id));
-    expect(output).toStrictEqual({
-      id: entity!.category_id.id,
+    expect(entity!.toJSON()).toStrictEqual({
+      category_id: entity!.category_id.id,
       name: 'test',
       description: 'some description',
       is_active: true,
       created_at: entity!.created_at,
     });
+  });
 
-    output = await useCase.execute({
+  it('should create a category with is_active', async () => {
+    const output = await useCase.execute({
       name: 'test',
-      description: 'some description',
       is_active: false,
     });
-    entity = await repository.findById(new Uuid(output.id));
+
+    const entity = await repository.findById(new CategoryId(output.id));
     expect(output).toStrictEqual({
       id: entity!.category_id.id,
       name: 'test',
-      description: 'some description',
+      description: null,
+      is_active: false,
+      created_at: entity!.created_at,
+    });
+
+    expect(entity!.toJSON()).toStrictEqual({
+      category_id: entity!.category_id.id,
+      name: 'test',
+      description: null,
       is_active: false,
       created_at: entity!.created_at,
     });

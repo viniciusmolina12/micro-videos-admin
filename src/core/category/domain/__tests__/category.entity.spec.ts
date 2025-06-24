@@ -1,4 +1,4 @@
-import { Uuid } from '../../../shared/domain/value-objects/uuid.vo';
+import { CategoryId } from '../value-objects/category-id.vo';
 import { Category } from '../category.aggregate';
 
 describe('Category Entity Unit Tests', () => {
@@ -8,7 +8,7 @@ describe('Category Entity Unit Tests', () => {
         name: 'Movie',
       });
 
-      expect(category.category_id).toBeInstanceOf(Uuid);
+      expect(category.category_id).toBeInstanceOf(CategoryId);
       expect(category.name).toBe('Movie');
       expect(category.description).toBeNull();
       expect(category.is_active).toBe(true);
@@ -17,7 +17,7 @@ describe('Category Entity Unit Tests', () => {
 
     it('deve criar uma categoria com todos os valores', () => {
       const created_at = new Date();
-      const category_id = new Uuid();
+      const category_id = new CategoryId();
       const category = new Category({
         category_id,
         name: 'Movie',
@@ -41,7 +41,7 @@ describe('Category Entity Unit Tests', () => {
         description: 'Movie description',
       });
 
-      expect(category.category_id).toBeInstanceOf(Uuid);
+      expect(category.category_id).toBeInstanceOf(CategoryId);
       expect(category.name).toBe('Movie');
       expect(category.description).toBe('Movie description');
       expect(category.is_active).toBe(true);
@@ -78,7 +78,7 @@ describe('Category Entity Unit Tests', () => {
   describe('toJSON', () => {
     it('deve retornar os dados da categoria em formato JSON', () => {
       const created_at = new Date();
-      const category_id = new Uuid();
+      const category_id = new CategoryId();
       const category = new Category({
         category_id,
         name: 'Movie',

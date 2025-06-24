@@ -1,11 +1,10 @@
 import { NotFoundError } from '../../../../../shared/domain/errors/not-found.error';
-import {
-  InvalidUuidError,
-  Uuid,
-} from '../../../../../shared/domain/value-objects/uuid.vo';
+import { InvalidUuidError } from '../../../../../shared/domain/value-objects/uuid.vo';
+import { CategoryId } from '../../../../domain/value-objects/category-id.vo';
 import { CategoryInMemoryRepository } from '../../../../../shared/infra/db/in-memory/category/category-in-memory.repository';
 import { Category } from '../../../../domain/category.aggregate';
 import { GetCategoryUseCase } from '../get-category.usecase';
+
 describe('GetCategoryUseCase Unit Tests', () => {
   let useCase: GetCategoryUseCase;
   let repository: CategoryInMemoryRepository;
@@ -20,24 +19,26 @@ describe('GetCategoryUseCase Unit Tests', () => {
       new InvalidUuidError(),
     );
 
-    const categoryId = new Uuid();
+    const categoryId = new CategoryId();
     await expect(() => useCase.execute({ id: categoryId.id })).rejects.toThrow(
       new NotFoundError(categoryId.id, Category),
     );
   });
 
   it('should returns a category', async () => {
-    const items = [Category.create({ name: 'Movie' })];
-    repository.items = items;
+    const entity = new Category({ name: 'Movie' });
+    repository.items = [entity];
     const spyFindById = jest.spyOn(repository, 'findById');
-    const output = await useCase.execute({ id: items[0].category_id.id });
+
+    const output = await useCase.execute({ id: entity.category_id.id });
+
     expect(spyFindById).toHaveBeenCalledTimes(1);
     expect(output).toStrictEqual({
-      id: items[0].category_id.id,
-      name: 'Movie',
-      description: null,
-      is_active: true,
-      created_at: items[0].created_at,
+      id: entity.category_id.id,
+      name: entity.name,
+      description: entity.description,
+      is_active: entity.is_active,
+      created_at: entity.created_at,
     });
   });
 });
