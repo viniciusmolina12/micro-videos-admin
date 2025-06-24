@@ -1,5 +1,5 @@
 import { Category } from '../../../../../category/domain/category.aggregate';
-import { Uuid } from '../../../../domain/value-objects/uuid.vo';
+import { CategoryId } from '../../../../../category/domain/value-objects/category-id.vo';
 import { CategoryModel } from '../category.model';
 import { CategoryModelMapper } from '../category-model-mapper';
 import { setupSequelize } from '../../../testing/helpers';
@@ -18,7 +18,7 @@ describe('CategoryModelMapper Integration Tests', () => {
     const aggregate = CategoryModelMapper.toEntity(model);
     expect(aggregate.toJSON()).toStrictEqual(
       new Category({
-        category_id: new Uuid('5490020a-e866-4229-9adc-aa44b83234c4'),
+        category_id: new CategoryId('5490020a-e866-4229-9adc-aa44b83234c4'),
         name: 'some value',
         description: 'some description',
         is_active: true,
@@ -31,7 +31,7 @@ describe('CategoryModelMapper Integration Tests', () => {
     const created_at = new Date();
     const entity = Category.fake()
       .aCategory()
-      .withCategoryId(new Uuid('5490020a-e866-4229-9adc-aa44b83234c4'))
+      .withCategoryId(new CategoryId('5490020a-e866-4229-9adc-aa44b83234c4'))
       .withCreatedAt(created_at)
       .withDescription('some description')
       .withName('some value')

@@ -3,9 +3,10 @@ import { CreateCategoryFixture } from 'src/nest-modules/categories/__tests__/tes
 import { ICategoryRepository } from '@core/category/domain/category.repository';
 import { CATEGORY_PROVIDERS } from 'src/nest-modules/categories/categories.providers';
 import { startApp } from 'src/nest-modules/shared/testing/helpers';
-import { Uuid } from '@core/shared/domain/value-objects/uuid.vo';
+import { CategoryId } from '@core/category/domain/value-objects/category-id.vo';
 import { CategoryOutputMapper } from '@core/category/application/usecases/@shared/category-output';
 import { CategoriesController } from 'src/nest-modules/categories/categories.controller';
+
 describe('CategoriesController (e2e)', () => {
   const appHelper = startApp();
   let categoryRepo: ICategoryRepository;
@@ -28,7 +29,7 @@ describe('CategoriesController (e2e)', () => {
           const keysInReponse = CreateCategoryFixture.keysInResponse;
           expect(Object.keys(response.body)).toStrictEqual(['data']);
           const id = response.body.data.id;
-          const entity = await categoryRepo.findById(new Uuid(id));
+          const entity = await categoryRepo.findById(new CategoryId(id));
           const presenter = CategoriesController.serialize(
             CategoryOutputMapper.toOutput(entity),
           );
