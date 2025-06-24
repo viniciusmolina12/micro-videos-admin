@@ -1,5 +1,5 @@
 import { CategoryInMemoryRepository } from '../../../../../shared/infra/db/in-memory/category/category-in-memory.repository';
-import { Category } from '../../../../domain/category.entity';
+import { Category } from '../../../../domain/category.aggregate';
 import { CategorySearchResult } from '../../../../domain/category.repository';
 import { ListCategoryUseCase } from '../list-category.usecase';
 import { CategoryOutputMapper } from '../../@shared/category-output';

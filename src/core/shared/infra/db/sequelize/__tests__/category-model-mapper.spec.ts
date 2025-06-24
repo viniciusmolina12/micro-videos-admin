@@ -1,4 +1,4 @@
-import { Category } from '../../../../../category/domain/category.entity';
+import { Category } from '../../../../../category/domain/category.aggregate';
 import { Uuid } from '../../../../domain/value-objects/uuid.vo';
 import { CategoryModel } from '../category.model';
 import { CategoryModelMapper } from '../category-model-mapper';

@@ -3,7 +3,7 @@ import { ICategoryRepository } from '../../src/core/category/domain/category.rep
 import * as CategoryProviders from '../../src/nest-modules/categories/categories.providers';
 
 import { startApp } from 'src/nest-modules/shared/testing/helpers';
-import { Category } from '@core/category/domain/category.entity';
+import { Category } from '@core/category/domain/category.aggregate';
 
 describe('CategoriesController (e2e)', () => {
   describe('/delete/:id (DELETE)', () => {

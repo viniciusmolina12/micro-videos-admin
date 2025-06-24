@@ -22,7 +22,7 @@ import {
 } from './testing/category-fixture';
 import { CategoryOutputMapper } from '@core/category/application/usecases/@shared/category-output';
 import { Uuid } from '@core/shared/domain/value-objects/uuid.vo';
-import { Category } from '@core/category/domain/category.entity';
+import { Category } from '@core/category/domain/category.aggregate';
 
 describe('CategoriesController Integration Tests', () => {
   let controller: CategoriesController;

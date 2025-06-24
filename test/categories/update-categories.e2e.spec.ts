@@ -6,7 +6,7 @@ import { CategoryOutputMapper } from '@core/category/application/usecases/@share
 import { Uuid } from '@core/shared/domain/value-objects/uuid.vo';
 import { startApp } from 'src/nest-modules/shared/testing/helpers';
 import { CategoriesController } from 'src/nest-modules/categories/categories.controller';
-import { Category } from '@core/category/domain/category.entity';
+import { Category } from '@core/category/domain/category.aggregate';
 import { UpdateCategoryFixture } from 'src/nest-modules/categories/__tests__/testing/category-fixture';
 
 describe('CategoriesController (e2e)', () => {
