@@ -1,0 +1,14 @@
+{
+  "name": "Node.js App with MySQL",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/home/node/app",
+  "settings": {
+    "terminal.integrated.defaultProfile.linux": "bash"
+  },
+  "forwardPorts": [3000],
+  "remoteUser": "node",
+  "mounts": [
+    "source=${localWorkspaceFolder}/node_modules,target=/home/node/app/node_modules,type=bind"
+  ]
+}
