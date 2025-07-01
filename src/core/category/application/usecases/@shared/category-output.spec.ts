@@ -12,7 +12,7 @@ describe('CategoryOutputMapper Unit Tests', () => {
     const output = CategoryOutputMapper.toOutput(entity);
     expect(spyToJSON).toHaveBeenCalled();
     expect(output).toStrictEqual({
-      id: entity.category_id.id,
+      id: entity.category_id!.id,
       name: 'Movie',
       description: 'some description',
       is_active: true,

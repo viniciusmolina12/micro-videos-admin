@@ -12,8 +12,8 @@ export class CategoryOutputMapper {
   static toOutput(entity: Category): CategoryOutput {
     const { category_id, ...props } = entity.toJSON();
     return {
-      id: entity.category_id.id,
+      id: entity.category_id!.id,
       ...props,
-    };
+    } as CategoryOutput;
   }
 }

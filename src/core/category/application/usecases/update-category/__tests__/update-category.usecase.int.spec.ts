@@ -29,13 +29,13 @@ describe('UpdateCategoryUseCase Integration Tests', () => {
     await repository.insert(category);
 
     const output = await useCase.execute({
-      id: category.category_id.id,
+      id: category.category_id!.id,
       name: 'test',
       description: 'some description',
     });
 
     expect(output).toStrictEqual({
-      id: category.category_id.id,
+      id: category.category_id!.id,
       name: 'test',
       description: 'some description',
       is_active: category.is_active,
@@ -43,10 +43,10 @@ describe('UpdateCategoryUseCase Integration Tests', () => {
     });
 
     const entityUpdated = await repository.findById(
-      new CategoryId(category.category_id.id),
+      new CategoryId(category.category_id!.id),
     );
-    expect(entityUpdated.toJSON()).toStrictEqual({
-      category_id: category.category_id.id,
+    expect(entityUpdated!.toJSON()).toStrictEqual({
+      category_id: category.category_id!.id,
       name: 'test',
       description: 'some description',
       is_active: category.is_active,

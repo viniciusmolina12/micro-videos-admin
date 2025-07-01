@@ -91,8 +91,8 @@ describe('InMemoryRepository unit tests', () => {
     const entity = new StubEntity({ name: 'Test', entity_id: new Uuid() });
     await repository.insert(entity);
     const entityFound = await repository.findById(entity.entity_id);
-    expect(entityFound.name).toBe('Test');
-    expect(entityFound.entity_id.id).toBe(entity.entity_id.id);
+    expect(entityFound!.name).toBe('Test');
+    expect(entityFound!.entity_id.id).toBe(entity.entity_id.id);
   });
 
   it('should return null when try to find a non existent entity', async () => {

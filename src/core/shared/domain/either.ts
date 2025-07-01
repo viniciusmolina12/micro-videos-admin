@@ -44,13 +44,13 @@ export class Either<Ok = unknown, ErrorType = Error>
   }
 
   static ok<T, ErrorType = Error>(value: T): Either<T, ErrorType> {
-    return new Either(value, null);
+    return new Either(value, null as any);
   }
 
   static fail<ErrorType = Error, Ok = unknown>(
     error: ErrorType,
   ): Either<Ok, ErrorType> {
-    return new Either(null, error);
+    return new Either(null as any, error);
   }
 
   /**

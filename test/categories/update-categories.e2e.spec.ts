@@ -85,7 +85,7 @@ describe('CategoriesController (e2e)', () => {
         const category = Category.fake().aCategory().build();
         await categoryRepo.insert(category);
         return request(app.app.getHttpServer())
-          .patch(`/categories/${category.category_id.id}`)
+          .patch(`/categories/${category.category_id!.id}`)
           .send(value.send_data)
           .expect(422)
           .expect(value.expected);
@@ -109,7 +109,7 @@ describe('CategoriesController (e2e)', () => {
           await categoryRepo.insert(categoryCreated);
 
           const res = await request(appHelper.app.getHttpServer())
-            .patch(`/categories/${categoryCreated.category_id.id}`)
+            .patch(`/categories/${categoryCreated.category_id!.id}`)
             .send(send_data)
             .expect(200);
           const keyInResponse = UpdateCategoryFixture.keysInResponse;

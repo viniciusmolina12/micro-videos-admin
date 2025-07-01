@@ -41,7 +41,7 @@ export class Category extends AggregateRoot {
   }
 
   get entity_id(): ValueObject {
-    return this.category_id;
+    return this.category_id!;
   }
 
   changeName(name: string): void {

@@ -55,7 +55,7 @@ export class ConfigModule extends NestConfigModule {
 
     return super.forRoot({
       isGlobal: true,
-      envFilePath,
+      envFilePath: envFilePath as any,
       validationSchema: Joi.object({
         ...CONFIG_DB_SCHEMA,
       }),

@@ -78,7 +78,7 @@ describe('CategoriesController Integration Tests', () => {
       'when body is $send_data',
       async ({ send_data, expected }) => {
         const presenter = await controller.update(
-          category.category_id.id,
+          category.category_id!.id,
           send_data,
         );
         const entity = await repository.findById(new Uuid(presenter.id));
@@ -104,17 +104,19 @@ describe('CategoriesController Integration Tests', () => {
   it('should delete a category', async () => {
     const category = Category.fake().aCategory().build();
     await repository.insert(category);
-    const response = await controller.remove(category.category_id.id);
+    const response = await controller.remove(category.category_id!.id);
     expect(response).not.toBeDefined();
-    await expect(repository.findById(category.category_id)).resolves.toBeNull();
+    await expect(
+      repository.findById(category.category_id!),
+    ).resolves.toBeNull();
   });
 
   it('should get a category', async () => {
     const category = Category.fake().aCategory().build();
     await repository.insert(category);
-    const presenter = await controller.findOne(category.category_id.id);
+    const presenter = await controller.findOne(category.category_id!.id);
 
-    expect(presenter.id).toBe(category.category_id.id);
+    expect(presenter.id).toBe(category.category_id!.id);
     expect(presenter.name).toBe(category.name);
     expect(presenter.description).toBe(category.description);
     expect(presenter.created_at).toStrictEqual(category.created_at);

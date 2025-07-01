@@ -31,17 +31,15 @@ describe('CategoriesController (e2e)', () => {
           const id = response.body.data.id;
           const entity = await categoryRepo.findById(new CategoryId(id));
           const presenter = CategoriesController.serialize(
-            CategoryOutputMapper.toOutput(entity),
+            CategoryOutputMapper.toOutput(entity!),
           );
 
           const serialized = {
             id: presenter.id,
-            is_active: true,
             created_at: presenter.created_at.toISOString(),
           };
           expect(response.body.data).toStrictEqual({
             id: serialized.id,
-            is_active: serialized.is_active,
             created_at: serialized.created_at,
             ...expected,
           });

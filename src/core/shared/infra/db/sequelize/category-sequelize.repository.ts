@@ -34,8 +34,8 @@ export class CategorySequelizeRepository implements ICategoryRepository {
   }
 
   async update(entity: Category): Promise<void> {
-    const id = entity.category_id.id;
-    const model = await this._get(id);
+    const id = entity.category_id?.id;
+    const model = await this._get(id as string);
     if (!model) throw new NotFoundError(id, this.getEntity());
 
     const modelToUpdate = CategoryModelMapper.toModel(entity);
@@ -57,7 +57,7 @@ export class CategorySequelizeRepository implements ICategoryRepository {
     return model ? CategoryModelMapper.toEntity(model) : null;
   }
 
-  private async _get(id: string): Promise<CategoryModel> {
+  private async _get(id: string): Promise<CategoryModel | null> {
     return await this.categoryModel.findByPk(id);
   }
 
@@ -74,7 +74,7 @@ export class CategorySequelizeRepository implements ICategoryRepository {
       }),
 
       ...(props.sort && this.sortableFields.includes(props.sort)
-        ? { order: [[props.sort, props.sort_dir]] }
+        ? { order: [[props.sort, props.sort_dir || 'asc']] }
         : { order: [['created_at', 'desc']] }),
       offset: (props.page - 1) * props.per_page,
       limit: props.per_page,

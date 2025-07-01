@@ -45,11 +45,11 @@ describe('CategoriesController (e2e)', () => {
       await categoryRepo.insert(category);
 
       await request(appHelper.app.getHttpServer())
-        .delete(`/categories/${category.category_id.id}`)
+        .delete(`/categories/${category.category_id!.id}`)
         .expect(204);
 
       await expect(
-        categoryRepo.findById(category.category_id),
+        categoryRepo.findById(category.category_id!),
       ).resolves.toBeNull();
     });
   });

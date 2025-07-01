@@ -30,7 +30,7 @@ describe('UpdateCategoryUseCase Unit Tests', () => {
     repository.items = [aggregate];
     await expect(() =>
       useCase.execute({
-        id: aggregate.category_id.id,
+        id: aggregate.category_id!.id,
         name: 't'.repeat(256),
       }),
     ).rejects.toThrowError('Validator Error');
@@ -41,13 +41,13 @@ describe('UpdateCategoryUseCase Unit Tests', () => {
     repository.items = [entity];
 
     const output = await useCase.execute({
-      id: entity.category_id.id,
+      id: entity.category_id!.id,
       name: 'test',
       description: 'some description',
     });
 
     expect(output).toStrictEqual({
-      id: entity.category_id.id,
+      id: entity.category_id!.id,
       name: 'test',
       description: 'some description',
       is_active: true,
