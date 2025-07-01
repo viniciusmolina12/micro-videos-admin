@@ -2,7 +2,7 @@ import { EntityValidationError } from '@core/shared/domain/validators/validation
 import { CastMemberTypes } from '@core/cast-member/domain/cast-member-type.vo';
 import { CastMemberInMemoryRepository } from '@core/cast-member/infra/db/in-memory/cast-member-in-memory.repository';
 import { CreateCastMemberInput } from '../create-cast-member.input';
-import { CreateCastMemberUseCase } from '../create-cast-member.use-case';
+import { CreateCastMemberUseCase } from '../create-cast-member.usecase';
 
 describe('CreateCastMemberUseCase Unit Tests', () => {
   let useCase: CreateCastMemberUseCase;
