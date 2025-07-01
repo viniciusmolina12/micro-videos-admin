@@ -28,10 +28,10 @@ describe('GetCategoryUseCase Integration Tests', () => {
     const category = Category.fake().aCategory().build();
     await repository.insert(category);
 
-    const output = await useCase.execute({ id: category.category_id.id });
+    const output = await useCase.execute({ id: category.category_id!.id });
 
     expect(output).toStrictEqual({
-      id: category.category_id.id,
+      id: category.category_id!.id,
       name: category.name,
       description: category.description,
       is_active: category.is_active,

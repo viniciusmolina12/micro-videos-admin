@@ -8,7 +8,7 @@ describe('CategoryInMemoryRepository', () => {
   it('should no filter items when filter object is null', async () => {
     const items = [Category.fake().aCategory().build()];
     const filterSpy = jest.spyOn(items, 'filter' as any);
-    const itemsFiltered = await repository['applyFilter'](items, null);
+    const itemsFiltered = await repository['applyFilter'](items, null as any);
     expect(filterSpy).not.toHaveBeenCalled();
     expect(itemsFiltered).toStrictEqual(items);
   });
@@ -47,7 +47,11 @@ describe('CategoryInMemoryRepository', () => {
         .build(),
     ];
 
-    const itemsSorted = await repository['applySort'](items, null, null);
+    const itemsSorted = await repository['applySort'](
+      items,
+      null as any,
+      null as any,
+    );
     expect(itemsSorted).toStrictEqual([items[2], items[1], items[0]]);
   });
 

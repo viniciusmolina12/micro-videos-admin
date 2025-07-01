@@ -29,10 +29,10 @@ describe('DeleteCategoryUseCase Integration Tests', () => {
     await repository.insert(category);
 
     await useCase.execute({
-      id: category.category_id.id,
+      id: category.category_id!.id,
     });
 
-    const noHasModel = await CategoryModel.findByPk(category.category_id.id);
+    const noHasModel = await CategoryModel.findByPk(category.category_id!.id);
     expect(noHasModel).toBeNull();
   });
 });

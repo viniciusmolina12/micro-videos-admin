@@ -1,54 +1,52 @@
-import { setupSequelize } from '@core/shared/infra/testing/helpers';
-import * as CastMemberSequelize from '../cast-member-sequelize';
 import { LoadEntityError } from '@core/shared/domain/validators/validation.error';
-import {
-  CastMemberType,
-  CastMemberTypes,
-} from '@core/cast-member/domain/cast-member-type.vo';
-import {
-  CastMember,
-  CastMemberId,
-} from '@core/cast-member/domain/cast-member.aggregate';
+import { setupSequelize } from '@core/shared/infra/testing/helpers';
 
-const { CastMemberModel, CastMemberModelMapper } = CastMemberSequelize;
+import { CategoryModel } from '@core/shared/infra/db/sequelize/category.model';
+import { CategoryModelMapper } from '@core/shared/infra/db/sequelize/category-model-mapper';
+import { Category } from '@core/category/domain/category.aggregate';
+import { CategoryId } from '@core/category/domain/value-objects/category-id.vo';
 
-describe('CastMemberModelMapper Integration Tests', () => {
-  setupSequelize({ models: [CastMemberModel] });
+describe('CategoryModelMapper Integration Tests', () => {
+  setupSequelize({ models: [CategoryModel] });
 
-  it('should throws error when cast member is invalid', () => {
-    const model = CastMemberModel.build({
-      cast_member_id: '9366b7dc-2d71-4799-b91c-c64adb205104',
+  it('should throws error when category is invalid', () => {
+    expect.assertions(2);
+    //@ts-expect-error - This is an invalid category
+    const model = CategoryModel.build({
+      category_id: '9366b7dc-2d71-4799-b91c-c64adb205104',
+      name: 'a'.repeat(256),
     });
     try {
-      CastMemberModelMapper.toEntity(model);
-      fail('The cast member is valid, but it needs throws a LoadEntityError');
+      CategoryModelMapper.toEntity(model);
+      fail(
+        'The category is valid, but it needs throws a EntityValidationError',
+      );
     } catch (e) {
       expect(e).toBeInstanceOf(LoadEntityError);
       expect((e as LoadEntityError).error).toMatchObject([
         {
           name: ['name must be shorter than or equal to 255 characters'],
         },
-        { type: ['Invalid cast member type: undefined'] },
       ]);
     }
   });
 
-  it('should convert a cast member model to a cast member entity', () => {
+  it('should convert a category model to a category aggregate', () => {
     const created_at = new Date();
-    const model = CastMemberModel.build({
-      cast_member_id: '5490020a-e866-4229-9adc-aa44b83234c4',
+    const model = CategoryModel.build({
+      category_id: '5490020a-e866-4229-9adc-aa44b83234c4',
       name: 'some value',
-      type: CastMemberTypes.ACTOR,
+      description: 'some description',
+      is_active: true,
       created_at,
     });
-    const entity = CastMemberModelMapper.toEntity(model);
-    expect(entity.toJSON()).toStrictEqual(
-      new CastMember({
-        cast_member_id: new CastMemberId(
-          '5490020a-e866-4229-9adc-aa44b83234c4',
-        ),
+    const aggregate = CategoryModelMapper.toEntity(model);
+    expect(aggregate.toJSON()).toStrictEqual(
+      new Category({
+        category_id: new CategoryId('5490020a-e866-4229-9adc-aa44b83234c4'),
         name: 'some value',
-        type: CastMemberType.createAnActor(),
+        description: 'some description',
+        is_active: true,
         created_at,
       }).toJSON(),
     );

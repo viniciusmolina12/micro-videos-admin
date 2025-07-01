@@ -38,7 +38,7 @@ export abstract class InMemoryRepository<
     }
     this.items[indexFound] = entity;
   }
-  async delete(entity_id: EntityId): Promise<void | null> {
+  async delete(entity_id: EntityId): Promise<void> {
     const indexFound = this.items.findIndex((item) =>
       item.entity_id.equals(entity_id),
     );

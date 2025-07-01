@@ -23,7 +23,7 @@ describe('CreateCategoryUseCase Integration Tests', () => {
 
     const entity = await repository.findById(new CategoryId(output.id));
     expect(output).toStrictEqual({
-      id: entity!.category_id.id,
+      id: entity!.category_id!.id,
       name: 'test',
       description: null,
       is_active: true,
@@ -31,7 +31,7 @@ describe('CreateCategoryUseCase Integration Tests', () => {
     });
 
     expect(entity!.toJSON()).toStrictEqual({
-      category_id: entity!.category_id.id,
+      category_id: entity!.category_id!.id,
       name: 'test',
       description: null,
       is_active: true,
@@ -47,7 +47,7 @@ describe('CreateCategoryUseCase Integration Tests', () => {
 
     const entity = await repository.findById(new CategoryId(output.id));
     expect(output).toStrictEqual({
-      id: entity!.category_id.id,
+      id: entity!.category_id!.id,
       name: 'test',
       description: 'some description',
       is_active: true,
@@ -55,7 +55,7 @@ describe('CreateCategoryUseCase Integration Tests', () => {
     });
 
     expect(entity!.toJSON()).toStrictEqual({
-      category_id: entity!.category_id.id,
+      category_id: entity!.category_id!.id,
       name: 'test',
       description: 'some description',
       is_active: true,
@@ -71,7 +71,7 @@ describe('CreateCategoryUseCase Integration Tests', () => {
 
     const entity = await repository.findById(new CategoryId(output.id));
     expect(output).toStrictEqual({
-      id: entity!.category_id.id,
+      id: entity!.category_id!.id,
       name: 'test',
       description: null,
       is_active: false,
@@ -79,7 +79,7 @@ describe('CreateCategoryUseCase Integration Tests', () => {
     });
 
     expect(entity!.toJSON()).toStrictEqual({
-      category_id: entity!.category_id.id,
+      category_id: entity!.category_id!.id,
       name: 'test',
       description: null,
       is_active: false,

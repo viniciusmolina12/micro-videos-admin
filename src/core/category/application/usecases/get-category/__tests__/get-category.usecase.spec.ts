@@ -30,11 +30,11 @@ describe('GetCategoryUseCase Unit Tests', () => {
     repository.items = [entity];
     const spyFindById = jest.spyOn(repository, 'findById');
 
-    const output = await useCase.execute({ id: entity.category_id.id });
+    const output = await useCase.execute({ id: entity.category_id!.id });
 
     expect(spyFindById).toHaveBeenCalledTimes(1);
     expect(output).toStrictEqual({
-      id: entity.category_id.id,
+      id: entity.category_id!.id,
       name: entity.name,
       description: entity.description,
       is_active: entity.is_active,

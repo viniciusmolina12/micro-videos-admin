@@ -30,7 +30,7 @@ describe('DeleteCategoryUseCase Unit Tests', () => {
     const items = [new Category({ name: 'test 1' })];
     repository.items = items;
     await useCase.execute({
-      id: items[0].category_id.id,
+      id: items[0].category_id!.id,
     });
     expect(repository.items).toHaveLength(0);
   });

@@ -21,7 +21,7 @@ describe('CategorySequelizeRepository Integration Test', () => {
   it('should inserts a new entity', async () => {
     const category = Category.fake().aCategory().build();
     await repository.insert(category);
-    const categoryCreated = await repository.findById(category.category_id);
+    const categoryCreated = await repository.findById(category.category_id!);
     expect(categoryCreated!.toJSON()).toStrictEqual(category.toJSON());
   });
 
@@ -31,7 +31,7 @@ describe('CategorySequelizeRepository Integration Test', () => {
 
     const entity = Category.fake().aCategory().build();
     await repository.insert(entity);
-    entityFound = await repository.findById(entity.category_id);
+    entityFound = await repository.findById(entity.category_id!);
     expect(entity.toJSON()).toStrictEqual(entityFound!.toJSON());
   });
 
@@ -46,7 +46,7 @@ describe('CategorySequelizeRepository Integration Test', () => {
   it('should throw error on update when a entity not found', async () => {
     const entity = Category.fake().aCategory().build();
     await expect(repository.update(entity)).rejects.toThrow(
-      new NotFoundError(entity.category_id.id, Category),
+      new NotFoundError(entity.category_id!.id, Category),
     );
   });
 
@@ -57,7 +57,7 @@ describe('CategorySequelizeRepository Integration Test', () => {
     entity.changeName('Movie updated');
     await repository.update(entity);
 
-    const entityFound = await repository.findById(entity.category_id);
+    const entityFound = await repository.findById(entity.category_id!);
     expect(entity.toJSON()).toStrictEqual(entityFound!.toJSON());
   });
 
@@ -72,8 +72,8 @@ describe('CategorySequelizeRepository Integration Test', () => {
     const entity = new Category({ name: 'Movie' });
     await repository.insert(entity);
 
-    await repository.delete(entity.category_id);
-    await expect(repository.findById(entity.category_id)).resolves.toBeNull();
+    await repository.delete(entity.category_id!);
+    await expect(repository.findById(entity.category_id!)).resolves.toBeNull();
   });
 
   describe('search method tests', () => {
