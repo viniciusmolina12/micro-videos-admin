@@ -26,6 +26,13 @@ export class CategorySequelizeRepository implements ICategoryRepository {
     await this.categoryModel.bulkCreate(models);
   }
 
+  async existsById(ids: CategoryId[]): Promise<{
+    exists: CategoryId[];
+    not_exists: CategoryId[];
+  }> {
+    return { exists: [], not_exists: [] };
+  }
+
   async update(entity: Category): Promise<void> {
     const id = entity.category_id.id;
     const model = await this._get(id);
