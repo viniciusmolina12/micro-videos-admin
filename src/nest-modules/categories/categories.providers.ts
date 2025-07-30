@@ -8,6 +8,7 @@ import { UpdateCategoryUseCase } from '@core/category/application/usecases/updat
 import { ListCategoryUseCase } from '@core/category/application/usecases/list-category/list-category.usecase';
 import { GetCategoryUseCase } from '@core/category/application/usecases/get-category/get-category.usecase';
 import { DeleteCategoryUseCase } from '@core/category/application/usecases/delete-category/delete-category.usecase';
+import { UnitOfWorkSequelize } from '@core/shared/infra/db/sequelize/unit-of-work-sequelize';
 
 export const REPOSITORIES = {
   CATEGORY_REPOSITORY: {
@@ -20,10 +21,13 @@ export const REPOSITORIES = {
   },
   CATEGORY_SEQUELIZE_REPOSITORY: {
     provide: CategorySequelizeRepository,
-    useFactory: (categoryModel: typeof CategoryModel) => {
-      return new CategorySequelizeRepository(categoryModel);
+    useFactory: (
+      categoryModel: typeof CategoryModel,
+      uow: UnitOfWorkSequelize,
+    ) => {
+      return new CategorySequelizeRepository(categoryModel, uow);
     },
-    inject: [getModelToken(CategoryModel)],
+    inject: [getModelToken(CategoryModel), UnitOfWorkSequelize],
   },
 };
 
@@ -64,7 +68,6 @@ export const USE_CASES = {
     inject: [REPOSITORIES.CATEGORY_REPOSITORY.provide],
   },
 };
-
 
 export const CATEGORY_PROVIDERS = {
   REPOSITORIES,
