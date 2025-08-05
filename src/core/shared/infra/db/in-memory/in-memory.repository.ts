@@ -118,6 +118,12 @@ export abstract class InMemorySearchableRepository<
     };
   }
 
+  async findByIds(entity_ids: EntityId[]): Promise<E[]> {
+    return this.items.filter((item) =>
+      entity_ids.some((id) => item.entity_id.equals(id)),
+    );
+  }
+
   protected abstract applyFilter(
     items: E[],
     filter: Filter | null,
