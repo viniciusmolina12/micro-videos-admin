@@ -13,6 +13,7 @@ export interface IRepository<E extends Entity, EntityId extends ValueObject> {
     not_exists: EntityId[];
   }>;
   findById(entity_id: EntityId): Promise<E | null>;
+  findByIds(entity_ids: EntityId[]): Promise<E[]>;
   findAll(): Promise<E[]>;
 
   getEntity(): new (...args: any[]) => E;
