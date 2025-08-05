@@ -19,7 +19,7 @@ export type CategoryCreateCommand = {
 };
 
 export class Category extends AggregateRoot {
-  category_id?: CategoryId;
+  category_id: CategoryId;
   name: string;
   description?: string | null;
   is_active?: boolean;
