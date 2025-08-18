@@ -26,6 +26,7 @@ import {
 import { CastMemberOutput } from '@core/cast-member/application/usecases/common/cast-member-output';
 import { UpdateCastMemberInput } from '@core/cast-member/application/usecases/update-cast-member/update-cast-member.input';
 
+@Controller('cast-members')
 export class CastMembersController {
   @Inject(CreateCastMemberUseCase)
   private createUseCase: CreateCastMemberUseCase;
