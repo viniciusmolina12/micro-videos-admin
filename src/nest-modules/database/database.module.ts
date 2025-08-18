@@ -1,10 +1,18 @@
+import { CastMemberModel } from '@core/cast-member/infra/db/sequelize/cast-member-sequelize';
+import {
+  GenreCategoryModel,
+  GenreModel,
+} from '@core/genre/infra/db/sequelize/genre.model';
 import { CategoryModel } from '@core/shared/infra/db/sequelize/category.model';
-import { Module } from '@nestjs/common';
+import { UnitOfWorkSequelize } from '@core/shared/infra/db/sequelize/unit-of-work-sequelize';
+import { Global, Module, Scope } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { SequelizeModule } from '@nestjs/sequelize';
+import { getConnectionToken, SequelizeModule } from '@nestjs/sequelize';
+import { Sequelize } from 'sequelize-typescript';
 import { CONFIG_SCHEMA_TYPE } from 'src/nest-modules/config/config.module';
 
-const models = [CategoryModel];
+const models = [CategoryModel, GenreModel, GenreCategoryModel, CastMemberModel];
+@Global()
 @Module({
   imports: [
     SequelizeModule.forRootAsync({
@@ -40,5 +48,21 @@ const models = [CategoryModel];
       inject: [ConfigService],
     }),
   ],
+  providers: [
+    {
+      provide: UnitOfWorkSequelize,
+      useFactory: (sequelize: Sequelize) => {
+        return new UnitOfWorkSequelize(sequelize);
+      },
+      inject: [getConnectionToken()],
+      scope: process.env.NODE_ENV === 'e2e' ? Scope.DEFAULT : Scope.REQUEST,
+    },
+    {
+      provide: 'UnitOfWork',
+      useExisting: UnitOfWorkSequelize,
+      scope: process.env.NODE_ENV === 'e2e' ? Scope.DEFAULT : Scope.REQUEST,
+    },
+  ],
+  exports: ['UnitOfWork'],
 })
 export class DatabaseModule {}

@@ -9,6 +9,7 @@ import { ListCategoryUseCase } from '@core/category/application/usecases/list-ca
 import { GetCategoryUseCase } from '@core/category/application/usecases/get-category/get-category.usecase';
 import { DeleteCategoryUseCase } from '@core/category/application/usecases/delete-category/delete-category.usecase';
 import { UnitOfWorkSequelize } from '@core/shared/infra/db/sequelize/unit-of-work-sequelize';
+import { CategoriesIdExistsInDatabaseValidator } from '@core/category/application/validations/categories-ids-exists-in-database.validator';
 
 export const REPOSITORIES = {
   CATEGORY_REPOSITORY: {
@@ -27,7 +28,7 @@ export const REPOSITORIES = {
     ) => {
       return new CategorySequelizeRepository(categoryModel, uow);
     },
-    inject: [getModelToken(CategoryModel), UnitOfWorkSequelize],
+    inject: [getModelToken(CategoryModel), 'UnitOfWork'],
   },
 };
 
@@ -69,7 +70,17 @@ export const USE_CASES = {
   },
 };
 
+export const VALIDATIONS = {
+  CATEGORIES_IDS_EXISTS_IN_DATABASE_VALIDATOR: {
+    provide: CategoriesIdExistsInDatabaseValidator,
+    useFactory: (categoryRepo: ICategoryRepository) => {
+      return new CategoriesIdExistsInDatabaseValidator(categoryRepo);
+    },
+    inject: [REPOSITORIES.CATEGORY_REPOSITORY.provide],
+  },
+};
 export const CATEGORY_PROVIDERS = {
   REPOSITORIES,
   USE_CASES,
+  VALIDATIONS,
 };
