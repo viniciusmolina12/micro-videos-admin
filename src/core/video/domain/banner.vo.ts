@@ -1,6 +1,7 @@
 import { Either } from '@core/shared/domain/either';
 import { MediaFileValidator } from '@core/shared/domain/validators/media-file.validator';
 import { ImageMedia } from '@core/shared/domain/value-objects/image-media.vo';
+import { VideoId } from './video.aggregate';
 
 export class Banner extends ImageMedia {
   static max_size = 1024 * 1024 * 2; // 2MB
@@ -15,7 +16,7 @@ export class Banner extends ImageMedia {
     raw_name: string;
     mime_type: string;
     size: number;
-    video_id: string;
+    video_id: VideoId;
   }) {
     const validator = new MediaFileValidator(
       Banner.max_size,
@@ -29,7 +30,7 @@ export class Banner extends ImageMedia {
       });
       return new Banner({
         name,
-        location: `videos/${video_id}/images`,
+        location: `videos/${video_id.id}/images`,
       });
     });
   }

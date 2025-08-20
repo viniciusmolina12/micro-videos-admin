@@ -5,6 +5,8 @@ import { AggregateRoot } from '@core/shared/domain/aggregate-root';
 import { Uuid } from '@core/shared/domain/value-objects/uuid.vo';
 import { Rating } from './rating.vo';
 import { Banner } from './banner.vo';
+import { Thumbnail } from './thumbnail.vo';
+import { ThumbnailHalf } from './thumbnail-half.vo';
 
 export class VideoId extends Uuid {}
 
@@ -18,6 +20,8 @@ export type VideoConstructorProps = {
   is_opened: boolean;
   is_published: boolean;
   banner?: Banner;
+  thumbnail?: Thumbnail;
+  thumbnail_half?: ThumbnailHalf;
   categories_id: Map<string, CategoryId>;
   genres_id: Map<string, GenreId>;
   cast_members_id: Map<string, CastMemberId>;
@@ -33,6 +37,8 @@ export type VideoCreateCommand = {
   is_opened: boolean;
   is_published: boolean;
   banner?: Banner;
+  thumbnail?: Thumbnail;
+  thumbnail_half?: ThumbnailHalf;
   categories_id: CategoryId[];
   genres_id: GenreId[];
   cast_members_id: CastMemberId[];
@@ -48,6 +54,8 @@ export class Video extends AggregateRoot {
   is_opened: boolean;
   is_published: boolean;
   banner: Banner | null;
+  thumbnail: Thumbnail | null;
+  thumbnail_half: ThumbnailHalf | null;
   categories_id: Map<string, CategoryId>;
   genres_id: Map<string, GenreId>;
   cast_members_id: Map<string, CastMemberId>;
@@ -61,6 +69,8 @@ export class Video extends AggregateRoot {
     this.year_launched = props.year_launched;
     this.duration = props.duration;
     this.banner = props.banner ?? null;
+    this.thumbnail = props.thumbnail ?? null;
+    this.thumbnail_half = props.thumbnail_half ?? null;
     this.rating = props.rating;
     this.is_opened = props.is_opened;
     this.is_published = props.is_published;
@@ -190,6 +200,9 @@ export class Video extends AggregateRoot {
       duration: this.duration,
       is_opened: this.is_opened,
       is_published: this.is_published,
+      banner: this.banner?.toJSON() ?? null,
+      thumbnail: this.thumbnail?.toJSON() ?? null,
+      thumbnail_half: this.thumbnail_half?.toJSON() ?? null,
       categories_id: Array.from(this.categories_id.values()),
       genres_id: Array.from(this.genres_id.values()),
       cast_members_id: Array.from(this.cast_members_id.values()),
