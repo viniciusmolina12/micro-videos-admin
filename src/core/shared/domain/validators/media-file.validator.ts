@@ -40,7 +40,7 @@ export class MediaFileValidator {
     const extension = raw_name.split('.').pop();
     return (
       crypto
-        .createHash('256')
+        .createHash('sha256')
         .update(raw_name + Math.random() + Date.now())
         .digest('hex') +
       '.' +
