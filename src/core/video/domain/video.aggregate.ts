@@ -7,6 +7,10 @@ import { Rating } from './rating.vo';
 import { Banner } from './banner.vo';
 import { Thumbnail } from './thumbnail.vo';
 import { ThumbnailHalf } from './thumbnail-half.vo';
+import { Trailer } from './trailer.vo';
+import { VideoMedia } from './video-media.vo';
+import VideoValidatorFactory from './video.validator';
+import { AudioVideoMediaStatus } from '@core/shared/domain/value-objects/audio-video-media.vo';
 
 export class VideoId extends Uuid {}
 
@@ -22,6 +26,8 @@ export type VideoConstructorProps = {
   banner?: Banner;
   thumbnail?: Thumbnail;
   thumbnail_half?: ThumbnailHalf;
+  trailer?: Trailer;
+  video?: VideoMedia;
   categories_id: Map<string, CategoryId>;
   genres_id: Map<string, GenreId>;
   cast_members_id: Map<string, CastMemberId>;
@@ -39,6 +45,8 @@ export type VideoCreateCommand = {
   banner?: Banner;
   thumbnail?: Thumbnail;
   thumbnail_half?: ThumbnailHalf;
+  trailer?: Trailer;
+  video?: VideoMedia;
   categories_id: CategoryId[];
   genres_id: GenreId[];
   cast_members_id: CastMemberId[];
@@ -56,6 +64,8 @@ export class Video extends AggregateRoot {
   banner: Banner | null;
   thumbnail: Thumbnail | null;
   thumbnail_half: ThumbnailHalf | null;
+  trailer: Trailer | null;
+  video: VideoMedia | null;
   categories_id: Map<string, CategoryId>;
   genres_id: Map<string, GenreId>;
   cast_members_id: Map<string, CastMemberId>;
@@ -71,6 +81,8 @@ export class Video extends AggregateRoot {
     this.banner = props.banner ?? null;
     this.thumbnail = props.thumbnail ?? null;
     this.thumbnail_half = props.thumbnail_half ?? null;
+    this.trailer = props.trailer ?? null;
+    this.video = props.video ?? null;
     this.rating = props.rating;
     this.is_opened = props.is_opened;
     this.is_published = props.is_published;
@@ -93,33 +105,30 @@ export class Video extends AggregateRoot {
         ]),
       ),
     });
-    // video.validate();
+    video.validate();
+    video.markAsPublished();
     return video;
   }
 
   changeTitle(title: string): void {
     this.title = title;
-    // this.validate(['title']);
+    this.validate(['title']);
   }
 
   changeDescription(description: string): void {
     this.description = description;
-    // this.validate(['description']);
   }
 
   changeYearLaunched(year_launched: number): void {
     this.year_launched = year_launched;
-    // this.validate(['year_launched']);
   }
 
   changeDuration(duration: number): void {
     this.duration = duration;
-    // this.validate(['duration']);
   }
 
   changeRating(rating: Rating): void {
     this.rating = rating;
-    // this.validate(['rating']);
   }
 
   markAsOpened(): void {
@@ -128,6 +137,39 @@ export class Video extends AggregateRoot {
 
   markAsNotOpened(): void {
     this.is_opened = false;
+  }
+
+  replaceBanner(banner: Banner): void {
+    this.banner = banner;
+  }
+
+  replaceThumbnail(thumbnail: Thumbnail): void {
+    this.thumbnail = thumbnail;
+  }
+
+  replaceThumbnailHalf(thumbnailHalf: ThumbnailHalf): void {
+    this.thumbnail_half = thumbnailHalf;
+  }
+
+  replaceTrailer(trailer: Trailer): void {
+    this.trailer = trailer;
+    this.markAsPublished();
+  }
+
+  replaceVideo(video: VideoMedia): void {
+    this.video = video;
+    this.markAsPublished();
+  }
+
+  private markAsPublished(): void {
+    if (
+      this.trailer &&
+      this.video &&
+      this.trailer.status === AudioVideoMediaStatus.COMPLETED &&
+      this.video.status === AudioVideoMediaStatus.COMPLETED
+    ) {
+      this.is_published = true;
+    }
   }
 
   addCategoryId(category_id: CategoryId): void {
@@ -186,7 +228,10 @@ export class Video extends AggregateRoot {
       ]),
     );
   }
-
+  validate(fields?: string[]) {
+    const validator = VideoValidatorFactory.create();
+    return validator.validate(this.notification, this, fields);
+  }
   get entity_id() {
     return this.id;
   }
@@ -203,6 +248,8 @@ export class Video extends AggregateRoot {
       banner: this.banner?.toJSON() ?? null,
       thumbnail: this.thumbnail?.toJSON() ?? null,
       thumbnail_half: this.thumbnail_half?.toJSON() ?? null,
+      trailer: this.trailer?.toJSON() ?? null,
+      video: this.video?.toJSON() ?? null,
       categories_id: Array.from(this.categories_id.values()),
       genres_id: Array.from(this.genres_id.values()),
       cast_members_id: Array.from(this.cast_members_id.values()),
