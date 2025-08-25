@@ -12,11 +12,13 @@ import { VideoMedia } from './video-media.vo';
 import VideoValidatorFactory from './video.validator';
 import { AudioVideoMediaStatus } from '@core/shared/domain/value-objects/audio-video-media.vo';
 import { VideoCreatedEvent } from './events/video-created.event';
+import { VideoAudioMediaReplaced } from './events/video-audio-media-replaced.event';
+import { VideoFakeBuilder } from './video-fake.builder';
 
 export class VideoId extends Uuid {}
 
 export type VideoConstructorProps = {
-  id?: VideoId;
+  video_id?: VideoId;
   title: string;
   description: string;
   year_launched: number;
@@ -54,7 +56,7 @@ export type VideoCreateCommand = {
 };
 
 export class Video extends AggregateRoot {
-  id: VideoId;
+  video_id: VideoId;
   title: string;
   description: string;
   year_launched: number;
@@ -74,13 +76,16 @@ export class Video extends AggregateRoot {
 
   constructor(props: VideoConstructorProps) {
     super();
-    this.id = props.id ?? new VideoId();
+    this.video_id = props.video_id ?? new VideoId();
     this.title = props.title;
     this.description = props.description;
     this.year_launched = props.year_launched;
     this.duration = props.duration;
     this.banner = props.banner ?? null;
     this.thumbnail = props.thumbnail ?? null;
+    this.categories_id = props.categories_id;
+    this.genres_id = props.genres_id;
+    this.cast_members_id = props.cast_members_id;
     this.thumbnail_half = props.thumbnail_half ?? null;
     this.trailer = props.trailer ?? null;
     this.video = props.video ?? null;
@@ -88,6 +93,14 @@ export class Video extends AggregateRoot {
     this.is_opened = props.is_opened;
     this.is_published = props.is_published;
     this.created_at = props.created_at ?? new Date();
+    this.registerHandler(
+      VideoCreatedEvent.name,
+      this.onVideoCreated.bind(this),
+    );
+    this.registerHandler(
+      VideoAudioMediaReplaced.name,
+      this.onVideoAudioMediaReplaced.bind(this),
+    );
   }
 
   static create(props: VideoCreateCommand): Video {
@@ -107,10 +120,9 @@ export class Video extends AggregateRoot {
       ),
     });
     video.validate();
-    video.markAsPublished();
     video.applyEvent(
       new VideoCreatedEvent({
-        video_id: video.id,
+        video_id: video.video_id,
         title: video.title,
         description: video.description,
         year_launched: video.year_launched,
@@ -130,6 +142,10 @@ export class Video extends AggregateRoot {
       }),
     );
     return video;
+  }
+
+  static fake() {
+    return VideoFakeBuilder;
   }
 
   changeTitle(title: string): void {
@@ -175,23 +191,24 @@ export class Video extends AggregateRoot {
 
   replaceTrailer(trailer: Trailer): void {
     this.trailer = trailer;
-    this.markAsPublished();
+    this.applyEvent(
+      new VideoAudioMediaReplaced({
+        video_id: this.video_id,
+        media: trailer,
+        media_type: 'trailer',
+      }),
+    );
   }
 
   replaceVideo(video: VideoMedia): void {
     this.video = video;
-    this.markAsPublished();
-  }
-
-  private markAsPublished(): void {
-    if (
-      this.trailer &&
-      this.video &&
-      this.trailer.status === AudioVideoMediaStatus.COMPLETED &&
-      this.video.status === AudioVideoMediaStatus.COMPLETED
-    ) {
-      this.is_published = true;
-    }
+    this.applyEvent(
+      new VideoAudioMediaReplaced({
+        video_id: this.video_id,
+        media: video,
+        media_type: 'video',
+      }),
+    );
   }
 
   addCategoryId(category_id: CategoryId): void {
@@ -250,17 +267,39 @@ export class Video extends AggregateRoot {
       ]),
     );
   }
+
+  onVideoCreated(_event: VideoCreatedEvent): void {
+    if (this.is_published) return;
+    this.tryMarkAsPublished();
+  }
+
+  onVideoAudioMediaReplaced(_event: VideoAudioMediaReplaced): void {
+    if (this.is_published) return;
+    this.tryMarkAsPublished();
+  }
+
+  private tryMarkAsPublished(): void {
+    if (
+      this.trailer &&
+      this.video &&
+      this.trailer.status === AudioVideoMediaStatus.COMPLETED &&
+      this.video.status === AudioVideoMediaStatus.COMPLETED
+    ) {
+      this.is_published = true;
+    }
+  }
+
   validate(fields?: string[]) {
     const validator = VideoValidatorFactory.create();
     return validator.validate(this.notification, this, fields);
   }
   get entity_id() {
-    return this.id;
+    return this.video_id;
   }
 
   toJSON() {
     return {
-      id: this.id.id,
+      video_id: this.video_id.id,
       title: this.title,
       description: this.description,
       year_launched: this.year_launched,
