@@ -208,19 +208,19 @@ export class VideoModelMapper {
       categories_id: categories_id.map((category_id) =>
         VideoCategoryModel.build({
           video_id: entity.video_id.id,
-          category_id: category_id.id,
+          category_id: category_id,
         }),
       ),
-      genres_id: genres_id.map((category_id) =>
+      genres_id: genres_id.map((genre_id) =>
         VideoGenreModel.build({
           video_id: entity.video_id.id,
-          genre_id: category_id.id,
+          genre_id: genre_id,
         }),
       ),
       cast_members_id: cast_members_id.map((cast_member_id) =>
         VideoCastMemberModel.build({
           video_id: entity.video_id.id,
-          cast_member_id: cast_member_id.id,
+          cast_member_id: cast_member_id,
         }),
       ),
     };

@@ -304,7 +304,7 @@ export class Video extends AggregateRoot {
       description: this.description,
       year_launched: this.year_launched,
       duration: this.duration,
-      rating: this.rating,
+      rating: this.rating.value,
       is_opened: this.is_opened,
       is_published: this.is_published,
       banner: this.banner?.toJSON() ?? null,
@@ -312,9 +312,15 @@ export class Video extends AggregateRoot {
       thumbnail_half: this.thumbnail_half?.toJSON() ?? null,
       trailer: this.trailer?.toJSON() ?? null,
       video: this.video?.toJSON() ?? null,
-      categories_id: Array.from(this.categories_id.values()),
-      genres_id: Array.from(this.genres_id.values()),
-      cast_members_id: Array.from(this.cast_members_id.values()),
+      categories_id: Array.from(this.categories_id.values()).map(
+        (category_id) => category_id.id,
+      ),
+      genres_id: Array.from(this.genres_id.values()).map(
+        (genre_id) => genre_id.id,
+      ),
+      cast_members_id: Array.from(this.cast_members_id.values()).map(
+        (cast_member_id) => cast_member_id.id,
+      ),
       created_at: this.created_at,
     };
   }

@@ -329,7 +329,7 @@ describe('VideoModelMapper Unit Tests', () => {
       description: videoProps.description,
       year_launched: videoProps.year_launched,
       duration: videoProps.duration,
-      rating: videoProps.rating,
+      rating: videoProps.rating.value,
       is_opened: videoProps.is_opened,
       is_published: videoProps.is_published,
       created_at: videoProps.created_at,
@@ -396,7 +396,7 @@ describe('VideoModelMapper Unit Tests', () => {
     expect(model2.description).toEqual(videoProps.description);
     expect(model2.year_launched).toEqual(videoProps.year_launched);
     expect(model2.duration).toEqual(videoProps.duration);
-    expect(model2.rating.value).toEqual(videoProps.rating.value);
+    expect(model2.rating).toEqual(videoProps.rating.value);
     expect(model2.is_opened).toEqual(videoProps.is_opened);
     expect(model2.is_published).toEqual(videoProps.is_published);
     expect(model2.created_at).toEqual(videoProps.created_at);
