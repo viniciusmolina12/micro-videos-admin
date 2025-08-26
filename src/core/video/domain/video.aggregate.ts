@@ -26,11 +26,11 @@ export type VideoConstructorProps = {
   rating: Rating;
   is_opened: boolean;
   is_published: boolean;
-  banner?: Banner;
-  thumbnail?: Thumbnail;
-  thumbnail_half?: ThumbnailHalf;
-  trailer?: Trailer;
-  video?: VideoMedia;
+  banner?: Banner | null;
+  thumbnail?: Thumbnail | null;
+  thumbnail_half?: ThumbnailHalf | null;
+  trailer?: Trailer | null;
+  video?: VideoMedia | null;
   categories_id: Map<string, CategoryId>;
   genres_id: Map<string, GenreId>;
   cast_members_id: Map<string, CastMemberId>;
@@ -304,6 +304,7 @@ export class Video extends AggregateRoot {
       description: this.description,
       year_launched: this.year_launched,
       duration: this.duration,
+      rating: this.rating,
       is_opened: this.is_opened,
       is_published: this.is_published,
       banner: this.banner?.toJSON() ?? null,
