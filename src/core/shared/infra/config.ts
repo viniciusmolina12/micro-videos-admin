@@ -13,6 +13,16 @@ export class Config {
     };
   }
 
+  static bucketName() {
+    Config.readEnv();
+    return Config.env.GOOGLE_CLOUD_STORAGE_BUCKET_NAME;
+  }
+
+  static googleCloudCredentials() {
+    Config.readEnv();
+    return JSON.parse(Config.env.GOOGLE_CLOUD_CREDENTIALS);
+  }
+
   static readEnv() {
     if (Config.env) return;
     Config.env = readEnv({
