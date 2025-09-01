@@ -30,6 +30,6 @@ export class UnitOfWorkFakeInMemory implements IUnitOfWork {
     this.aggregateRoots.add(aggregateRoot);
   }
   getAggregateRoots(): AggregateRoot[] {
-    return [...this.aggregateRoots];
+    return Array.from(this.aggregateRoots);
   }
 }
