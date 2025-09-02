@@ -9,13 +9,18 @@ import {
   CategorySearchResult,
 } from '../../../../../category/domain/category.repository';
 import { setupSequelize } from '../../../testing/helpers';
+import { UnitOfWorkSequelize } from '../unit-of-work-sequelize';
+import { Sequelize } from 'sequelize';
 
 describe('CategorySequelizeRepository Integration Test', () => {
   let repository: CategorySequelizeRepository;
-  setupSequelize({ models: [CategoryModel] });
+  const sequelizeHelper = setupSequelize({ models: [CategoryModel] });
 
   beforeEach(async () => {
-    repository = new CategorySequelizeRepository(CategoryModel);
+    repository = new CategorySequelizeRepository(
+      CategoryModel,
+      new UnitOfWorkSequelize(sequelizeHelper.sequelize),
+    );
   });
 
   it('should inserts a new entity', async () => {

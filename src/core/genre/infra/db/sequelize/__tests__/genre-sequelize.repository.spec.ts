@@ -24,7 +24,10 @@ describe('GenreSequelizeRepository Integration Tests', () => {
   beforeEach(async () => {
     uow = new UnitOfWorkSequelize(sequelizeHelper.sequelize);
     genreRepo = new GenreSequelizeRepository(GenreModel, uow);
-    categoryRepo = new CategorySequelizeRepository(CategoryModel);
+    categoryRepo = new CategorySequelizeRepository(
+      CategoryModel,
+      new UnitOfWorkSequelize(sequelizeHelper.sequelize),
+    );
   });
 
   it('should inserts a new entity', async () => {
