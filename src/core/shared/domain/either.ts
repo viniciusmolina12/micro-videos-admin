@@ -39,7 +39,7 @@ export class Either<Ok = unknown, ErrorType = Error>
     }
   }
 
-  static of<Ok, ErrorType = Error>(value: Ok): Either<Ok, ErrorType> {
+  public static of<Ok, ErrorType = Error>(value: Ok): Either<Ok, ErrorType> {
     return Either.ok(value);
   }
 
