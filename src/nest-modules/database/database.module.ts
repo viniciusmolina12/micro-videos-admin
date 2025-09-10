@@ -5,13 +5,32 @@ import {
 } from '@core/genre/infra/db/sequelize/genre.model';
 import { CategoryModel } from '@core/shared/infra/db/sequelize/category.model';
 import { UnitOfWorkSequelize } from '@core/shared/infra/db/sequelize/unit-of-work-sequelize';
+import {
+  VideoModel,
+  VideoCategoryModel,
+  VideoGenreModel,
+  VideoCastMemberModel,
+} from '@core/video/infra/db/sequelize/video.model';
+import { ImageMediaModel } from '@core/video/infra/db/sequelize/image-media.model';
+import { AudioVideoMediaModel } from '@core/video/infra/db/sequelize/audio-video-media.model';
 import { Global, Module, Scope } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { getConnectionToken, SequelizeModule } from '@nestjs/sequelize';
 import { Sequelize } from 'sequelize-typescript';
 import { CONFIG_SCHEMA_TYPE } from 'src/nest-modules/config/config.module';
 
-const models = [CategoryModel, GenreModel, GenreCategoryModel, CastMemberModel];
+const models = [
+  CategoryModel,
+  GenreModel,
+  GenreCategoryModel,
+  CastMemberModel,
+  VideoModel,
+  VideoCategoryModel,
+  VideoGenreModel,
+  VideoCastMemberModel,
+  ImageMediaModel,
+  AudioVideoMediaModel,
+];
 @Global()
 @Module({
   imports: [
