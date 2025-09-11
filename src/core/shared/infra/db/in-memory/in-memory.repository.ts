@@ -54,6 +54,12 @@ export abstract class InMemoryRepository<
     return this.items;
   }
 
+  async findByIds(entity_ids: EntityId[]): Promise<E[]> {
+    return this.items.filter((item) =>
+      entity_ids.some((id) => item.entity_id.equals(id)),
+    );
+  }
+
   protected async _get(entity_id: EntityId) {
     const item = this.items.find((item) => item.entity_id.equals(entity_id));
     return typeof item === 'undefined' ? null : item;
