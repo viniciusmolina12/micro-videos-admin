@@ -20,9 +20,10 @@ import { CastMembersIdExistsInDatabaseValidator } from '../../core/cast-member/a
 import { UpdateVideoUseCase } from '../../core/video/application/usecases/update-video/update-video.usecase';
 import { GetVideoUseCase } from '../../core/video/application/usecases/get-video/get-video.usecase';
 import { ProcessAudioVideoMediasUseCase } from '../../core/video/application/usecases/process-audio-video-medias/process-audio-video-medias.usecase';
-import { PublishVideoMediaReplacedInQueueHandler } from '../../core/video/application/handlers/publish-video-media-replaced-in-queue.handler';
-import { IMessageBroker } from '../../core/shared/application/message-broker.interface';
+// import { PublishVideoMediaReplacedInQueueHandler } from '../../core/video/application/handlers/publish-video-media-replaced-in-queue.handler';
+// import { IMessageBroker } from '../../core/shared/application/message-broker.interface';
 import { UploadAudioVideoMediasUseCase } from '@core/video/application/usecases/upload-audio-video-medias/upload-audio-video-media.usecase';
+import { PublishVideoMediaReplacedInQueueListener } from '@core/video/application/listeners/publish-video-media-replaced-in-queue.listener';
 
 export const REPOSITORIES = {
   VIDEO_REPOSITORY: {
@@ -145,18 +146,17 @@ export const USE_CASES = {
   },
 };
 
-export const HANDLERS = {
+export const LISTENERS = {
   PUBLISH_VIDEO_MEDIA_REPLACED_IN_QUEUE_HANDLER: {
-    provide: PublishVideoMediaReplacedInQueueHandler,
-    useFactory: (messageBroker: IMessageBroker) => {
-      return new PublishVideoMediaReplacedInQueueHandler(messageBroker);
+    provide: PublishVideoMediaReplacedInQueueListener,
+    useFactory: () => {
+      return new PublishVideoMediaReplacedInQueueListener();
     },
-    inject: ['IMessageBroker'],
   },
 };
 
 export const VIDEOS_PROVIDERS = {
   REPOSITORIES,
   USE_CASES,
-  HANDLERS,
+  LISTENERS,
 };

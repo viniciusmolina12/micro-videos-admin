@@ -91,36 +91,36 @@ export class VideosController {
       await this.updateUseCase.execute(input);
     }
 
-    const hasMoreThanOneFile = Object.keys(files).length > 1;
+    if (hasFiles) {
+      const hasMoreThanOneFile = files ? Object.keys(files)?.length > 1 : false;
+      if (hasMoreThanOneFile) {
+        throw new BadRequestException('Only one file can be sent');
+      }
 
-    if (hasMoreThanOneFile) {
-      throw new BadRequestException('Only one file can be sent');
-    }
+      const hasAudioVideoMedia = files?.trailer?.length || files?.video?.length;
+      const fieldField = Object.keys(files)[0];
+      const file = files[fieldField][0];
 
-    const hasAudioVideoMedia = files.trailer?.length || files.video?.length;
-    const fieldField = Object.keys(files)[0];
-    const file = files[fieldField][0];
+      if (hasAudioVideoMedia) {
+        const dto: UploadAudioVideoMediaInput = {
+          video_id: id,
+          field: fieldField as any,
+          file: {
+            raw_name: file.originalname,
+            data: file.buffer,
+            mime_type: file.mimetype,
+            size: file.size,
+          },
+        };
 
-    if (hasAudioVideoMedia) {
-      const dto: UploadAudioVideoMediaInput = {
-        video_id: id,
-        field: fieldField as any,
-        file: {
-          raw_name: file.originalname,
-          data: file.buffer,
-          mime_type: file.mimetype,
-          size: file.size,
-        },
-      };
-
-      const input = await new ValidationPipe({
-        errorHttpStatusCode: 422,
-      }).transform(dto, {
-        metatype: UploadAudioVideoMediaInput,
-        type: 'body',
-      });
-
-      await this.uploadAudioVideoMedia.execute(input);
+        const input = await new ValidationPipe({
+          errorHttpStatusCode: 422,
+        }).transform(dto, {
+          metatype: UploadAudioVideoMediaInput,
+          type: 'body',
+        });
+        await this.uploadAudioVideoMedia.execute(input);
+      }
     } else {
       //use case upload image media
     }
