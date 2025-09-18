@@ -16,7 +16,10 @@ export class ApplicationService {
     aggregateRoots.forEach(async (aggregateRoot) => {
       await this.domainEventMediator.publish(aggregateRoot);
     });
-    return this.unitOfWork.commit();
+    await this.unitOfWork.commit();
+    aggregateRoots.forEach(async (aggregateRoot) => {
+      await this.domainEventMediator.publishIntegrationEvent(aggregateRoot);
+    });
   }
 
   fail(): Promise<void> {
