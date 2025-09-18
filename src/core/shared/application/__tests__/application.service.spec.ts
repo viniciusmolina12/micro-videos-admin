@@ -48,9 +48,14 @@ describe('ApplicationService', () => {
       const aggregateRoot = new StubAggregate();
       uow.addAggregateRoot(aggregateRoot);
       const spyOnPublish = jest.spyOn(domainEventMediator, 'publish');
+      const spyOnPublishIntegrationEvent = jest.spyOn(
+        domainEventMediator,
+        'publishIntegrationEvent',
+      );
       const spyOnCommit = jest.spyOn(uow, 'commit');
       await appService.finish();
       expect(spyOnPublish).toHaveBeenCalledWith(aggregateRoot);
+      expect(spyOnPublishIntegrationEvent).toHaveBeenCalledWith(aggregateRoot);
       expect(spyOnCommit).toHaveBeenCalledTimes(1);
     });
   });

@@ -1,7 +1,7 @@
 import { EventEmitter2 } from 'eventemitter2';
 import { DomainEventMediator } from '../domain-event-mediator';
 import { AggregateRoot } from '../../aggregate-root';
-import { IDomainEvent } from '../domain-event.interface';
+import { IDomainEvent, IIntegrationEvent } from '../domain-event.interface';
 import { ValueObject } from '../../value-object';
 import { Uuid } from '../../value-objects/uuid.vo';
 
@@ -16,6 +16,24 @@ class StubDomainEvent implements IDomainEvent {
     this.occurred_on = new Date();
     this.event_version = 1;
     this.name = name;
+  }
+
+  getIntegrationEvent(): IIntegrationEvent {
+    return new StubIntegrationEvent(this);
+  }
+}
+
+class StubIntegrationEvent implements IIntegrationEvent {
+  occurred_on: Date;
+  event_version: number;
+  payload: any;
+  event_name: string;
+
+  constructor(stubDomainEvent: StubDomainEvent) {
+    this.occurred_on = stubDomainEvent.occurred_on;
+    this.event_version = stubDomainEvent.event_version;
+    this.payload = stubDomainEvent;
+    this.event_name = this.constructor.name;
   }
 }
 
@@ -60,5 +78,18 @@ describe('DomainEventMediator', () => {
     const aggregate = new StubAggregate();
     aggregate.action('test');
     await mediator.publish(aggregate);
+  });
+
+  it('should publish integration event', async () => {
+    expect.assertions(1);
+    const aggregate = new StubAggregate();
+    aggregate.action('test');
+    mediator.register(
+      StubIntegrationEvent.name,
+      (event: StubIntegrationEvent) => {
+        expect(event.payload.name).toBe('test');
+      },
+    );
+    await mediator.publishIntegrationEvent(aggregate);
   });
 });
