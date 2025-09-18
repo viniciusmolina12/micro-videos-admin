@@ -6,7 +6,7 @@
 
 # CMD ["tail", "-f", "/dev/null"]
 
-FROM node:20.5.1-slim
+FROM node:23.8-slim
 
 WORKDIR /home/node/app
 
