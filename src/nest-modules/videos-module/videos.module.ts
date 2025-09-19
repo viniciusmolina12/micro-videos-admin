@@ -15,6 +15,7 @@ import { AudioVideoMediaModel } from '../../core/video/infra/db/sequelize/audio-
 import { GenresModule } from '../genre/genres.module';
 import { CastMembersModule } from '../cast-members/cast-member.module';
 import { VIDEOS_PROVIDERS } from './videos.providers';
+import { RabbitmqModule } from '../rabbitmq/rabbitmq.module';
 
 @Module({
   imports: [
@@ -26,7 +27,7 @@ import { VIDEOS_PROVIDERS } from './videos.providers';
       ImageMediaModel,
       AudioVideoMediaModel,
     ]),
-    // RabbitmqModule.forFeature(),
+    RabbitmqModule.forFeature(),
     CategoriesModule,
     GenresModule,
     CastMembersModule,
