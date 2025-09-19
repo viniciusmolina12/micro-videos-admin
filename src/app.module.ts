@@ -8,6 +8,8 @@ import { CastMembersModule } from './nest-modules/cast-members/cast-member.modul
 import { VideosModule } from './nest-modules/videos-module/videos.module';
 import { EventModule } from './nest-modules/event/event.module';
 import { UseCaseModule } from './nest-modules/usecase/usecase.module';
+import { RabbitMQFakeConsumer } from './nest-modules/rabbitmq-fake.consumer';
+import { RabbitmqModule } from './nest-modules/rabbitmq/rabbitmq.module';
 
 @Module({
   imports: [
@@ -20,8 +22,12 @@ import { UseCaseModule } from './nest-modules/usecase/usecase.module';
     CastMembersModule,
     GenresModule,
     VideosModule,
+    // RabbitMQModule.forRoot({
+    //   uri: 'amqp://admin:admin@localhost:5672',
+    // }),
+    RabbitmqModule.forRoot(),
   ],
   controllers: [],
-  providers: [],
+  providers: [RabbitMQFakeConsumer],
 })
 export class AppModule {}
