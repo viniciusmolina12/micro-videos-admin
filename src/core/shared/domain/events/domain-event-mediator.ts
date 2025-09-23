@@ -14,7 +14,6 @@ export class DomainEventMediator {
       aggregateRoot.markEventAsDispatched(event);
       await this.eventEmitter.emitAsync(event.constructor.name, event);
     });
-    aggregateRoot.events.clear();
   }
 
   async publishIntegrationEvent(aggregateRoot: AggregateRoot) {
