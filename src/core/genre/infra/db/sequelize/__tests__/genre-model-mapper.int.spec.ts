@@ -7,13 +7,19 @@ import { Genre, GenreId } from '../../../../domain/genre.aggregate';
 import { GenreModelMapper } from '../genre-model-mapper';
 import { CategorySequelizeRepository } from '@core/shared/infra/db/sequelize/category-sequelize.repository';
 import { GenreCategoryModel, GenreModel } from '../genre.model';
+import { UnitOfWorkSequelize } from '@core/shared/infra/db/sequelize/unit-of-work-sequelize';
 
 describe('GenreModelMapper Unit Tests', () => {
   let categoryRepo: ICategoryRepository;
-  setupSequelize({ models: [CategoryModel, GenreModel, GenreCategoryModel] });
+  const sequelizeHelper = setupSequelize({
+    models: [CategoryModel, GenreModel, GenreCategoryModel],
+  });
 
   beforeEach(() => {
-    categoryRepo = new CategorySequelizeRepository(CategoryModel);
+    categoryRepo = new CategorySequelizeRepository(
+      CategoryModel,
+      new UnitOfWorkSequelize(sequelizeHelper.sequelize),
+    );
   });
 
   it('should throws error when genre is invalid', () => {

@@ -5,6 +5,7 @@ import { Category } from '@core/category/domain/category.aggregate';
 import { GenreModel } from '../genre.model';
 import { GenreCategoryModel } from '../genre.model';
 import { CategorySequelizeRepository } from '@core/shared/infra/db/sequelize/category-sequelize.repository';
+import { UnitOfWorkSequelize } from '@core/shared/infra/db/sequelize/unit-of-work-sequelize';
 
 describe('GenreCategoryModel Integration Tests', () => {
   setupSequelize({
@@ -49,7 +50,7 @@ describe('GenreCategoryModel Integration Tests', () => {
 });
 
 describe('GenreModel Integration Tests', () => {
-  setupSequelize({
+  const sequelizeHelper = setupSequelize({
     models: [CategoryModel, GenreModel, GenreCategoryModel],
   });
 
@@ -132,7 +133,10 @@ describe('GenreModel Integration Tests', () => {
 
   test('create and association relations separately', async () => {
     const categories = Category.fake().theCategories(3).build();
-    const categoryRepo = new CategorySequelizeRepository(CategoryModel);
+    const categoryRepo = new CategorySequelizeRepository(
+      CategoryModel,
+      new UnitOfWorkSequelize(sequelizeHelper.sequelize),
+    );
     await categoryRepo.bulkInsert(categories);
 
     const genreData = {
@@ -202,7 +206,10 @@ describe('GenreModel Integration Tests', () => {
 
   test('create with association in single transaction ', async () => {
     const categories = Category.fake().theCategories(3).build();
-    const categoryRepo = new CategorySequelizeRepository(CategoryModel);
+    const categoryRepo = new CategorySequelizeRepository(
+      CategoryModel,
+      new UnitOfWorkSequelize(sequelizeHelper.sequelize),
+    );
     await categoryRepo.bulkInsert(categories);
 
     const genreModelData = {

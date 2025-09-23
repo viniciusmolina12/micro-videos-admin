@@ -4,15 +4,19 @@ import { setupSequelize } from '../../../../../shared/infra/testing/helpers';
 import { Category } from '../../../../domain/category.aggregate';
 import { CategoryOutputMapper } from '../../@shared/category-output';
 import { ListCategoryUseCase } from '../list-category.usecase';
+import { UnitOfWorkSequelize } from '@core/shared/infra/db/sequelize/unit-of-work-sequelize';
 
 describe('ListCategoriesUseCase Integration Tests', () => {
   let useCase: ListCategoryUseCase;
   let repository: CategorySequelizeRepository;
 
-  setupSequelize({ models: [CategoryModel] });
+  const sequelizeHelper = setupSequelize({ models: [CategoryModel] });
 
   beforeEach(() => {
-    repository = new CategorySequelizeRepository(CategoryModel);
+    repository = new CategorySequelizeRepository(
+      CategoryModel,
+      new UnitOfWorkSequelize(sequelizeHelper.sequelize),
+    );
     useCase = new ListCategoryUseCase(repository);
   });
 

@@ -5,15 +5,19 @@ import { setupSequelize } from '../../../../../shared/infra/testing/helpers';
 import { UpdateCategoryUseCase } from '../update-category.usecase';
 import { NotFoundError } from '../../../../../shared/domain/errors/not-found.error';
 import { Category } from '../../../../domain/category.aggregate';
+import { UnitOfWorkSequelize } from '@core/shared/infra/db/sequelize/unit-of-work-sequelize';
 
 describe('UpdateCategoryUseCase Integration Tests', () => {
   let useCase: UpdateCategoryUseCase;
   let repository: CategorySequelizeRepository;
 
-  setupSequelize({ models: [CategoryModel] });
+  const sequelizeHelper = setupSequelize({ models: [CategoryModel] });
 
   beforeEach(() => {
-    repository = new CategorySequelizeRepository(CategoryModel);
+    repository = new CategorySequelizeRepository(
+      CategoryModel,
+      new UnitOfWorkSequelize(sequelizeHelper.sequelize),
+    );
     useCase = new UpdateCategoryUseCase(repository);
   });
 
