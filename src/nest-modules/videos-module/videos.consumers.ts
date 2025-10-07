@@ -1,18 +1,24 @@
-import { Injectable, ValidationPipe } from '@nestjs/common';
+import { Injectable, UseFilters, ValidationPipe } from '@nestjs/common';
 import { RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 import { ProcessAudioVideoMediasInput } from '@core/video/application/usecases/process-audio-video-medias/process-audio-video-medias.input';
 import { AudioVideoMediaStatus } from '@core/shared/domain/value-objects/audio-video-media.vo';
 import { ProcessAudioVideoMediasUseCase } from '@core/video/application/usecases/process-audio-video-medias/process-audio-video-medias.usecase';
 import { ModuleRef } from '@nestjs/core';
+import { RabbitmqConsumeErrorFilter } from '../rabbitmq/rabbitmq-consume-error/rabbitmq-consume-error.filter';
 
+@UseFilters(RabbitmqConsumeErrorFilter)
 @Injectable()
 export class VideosConsumers {
   constructor(private moduleRef: ModuleRef) {}
   @RabbitSubscribe({
-    exchange: 'amq.direct',
+    exchange: 'direct.delayed',
     routingKey: 'videos.convert',
     queue: 'micro-videos/admin',
     allowNonJsonMessages: true,
+    queueOptions: {
+      deadLetterExchange: 'dlx.exchange',
+      deadLetterRoutingKey: 'videos.convert',
+    },
   })
   async onProcessVideo(msg: {
     video: {
@@ -29,20 +35,15 @@ export class VideosConsumers {
       field: field as 'trailer' | 'video',
       status: msg.video?.status as AudioVideoMediaStatus,
     });
-
-    try {
-      const processAudioVideoMediasUseCase = await this.moduleRef.resolve(
-        ProcessAudioVideoMediasUseCase,
-      );
-      await new ValidationPipe({
-        errorHttpStatusCode: 422,
-      }).transform(input, {
-        metatype: ProcessAudioVideoMediasInput,
-        type: 'body',
-      });
-      await processAudioVideoMediasUseCase.execute(input);
-    } catch (error) {
-      console.log('error', error);
-    }
+    const processAudioVideoMediasUseCase = await this.moduleRef.resolve(
+      ProcessAudioVideoMediasUseCase,
+    );
+    await new ValidationPipe({
+      errorHttpStatusCode: 422,
+    }).transform(input, {
+      metatype: ProcessAudioVideoMediasInput,
+      type: 'body',
+    });
+    await processAudioVideoMediasUseCase.execute(input);
   }
 }
