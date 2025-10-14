@@ -72,9 +72,11 @@ export const CONFIG_DB_SCHEMA: Joi.StrictSchemaMap<DB_SCHEMA_TYPE> = {
 
 type RABBITMQ_SCHEMA_TYPE = {
   RABBITMQ_URI: string;
+  RABBITMQ_REGISTER_HANDLERS: boolean;
 };
 export const RABBITMQ_SCHEMA: Joi.StrictSchemaMap<RABBITMQ_SCHEMA_TYPE> = {
   RABBITMQ_URI: Joi.string().required(),
+  RABBITMQ_REGISTER_HANDLERS: Joi.boolean().required(),
 };
 
 export type CONFIG_SCHEMA_TYPE = DB_SCHEMA_TYPE &

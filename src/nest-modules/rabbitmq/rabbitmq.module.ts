@@ -2,14 +2,19 @@ import {
   AmqpConnection,
   RabbitMQModule as GoLevelUpRabbitMQModule,
 } from '@golevelup/nestjs-rabbitmq';
-import { DynamicModule, Module } from '@nestjs/common';
+import { DynamicModule } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CONFIG_SCHEMA_TYPE } from '../config/config.module';
 import { RabbitMQMessageBroker } from '@core/shared/infra/message-broker/rabbitmq/rabbitmq-message-broker';
-import { RabbitmqConsumeErrorFilter } from './rabbitmq-consume-error/rabbitmq-consume-error.filter';
+
+type RabbitmqModuleOptions = {
+  enableConsumers?: boolean;
+};
 
 export class RabbitmqModule {
-  static forRoot(): DynamicModule {
+  static forRoot(
+    options: RabbitmqModuleOptions = { enableConsumers: false },
+  ): DynamicModule {
     return {
       module: RabbitmqModule,
       global: true,
@@ -17,26 +22,20 @@ export class RabbitmqModule {
         GoLevelUpRabbitMQModule.forRootAsync({
           useFactory: (configService: ConfigService<CONFIG_SCHEMA_TYPE>) => {
             return {
-              uri: configService.get('RABBITMQ_URI') as string,
+              registerHandlers:
+                options.enableConsumers ||
+                configService.get('RABBITMQ_REGISTER_HANDLERS'),
+              uri: configService.get('RABBITMQ_URI') ?? 'amqp://localhost:5672',
               exchanges: [
                 {
                   name: 'dlx.exchange',
                   type: 'topic',
                 },
-                {
-                  name: 'direct.delayed',
-                  type: 'x-delayed-message',
-                  options: {
-                    arguments: {
-                      'x-delayed-type': 'direct',
-                    },
-                  },
-                },
               ],
               queues: [
                 {
                   name: 'dlx.queue',
-                  exchange: 'dlx.exchange',
+                  deadLetterExchange: 'dlx.exchange',
                   routingKey: '#',
                 },
               ],
@@ -45,7 +44,6 @@ export class RabbitmqModule {
           inject: [ConfigService],
         }),
       ],
-      providers: [RabbitmqConsumeErrorFilter],
       exports: [GoLevelUpRabbitMQModule],
     };
   }
