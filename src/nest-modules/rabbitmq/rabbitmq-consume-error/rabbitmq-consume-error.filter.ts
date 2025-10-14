@@ -1,38 +1,37 @@
-import { NotFoundError } from '@core/shared/domain/errors/not-found.error';
-import { EntityValidationError } from '@core/shared/domain/validators/validation.error';
-import { AmqpConnection, Nack } from '@golevelup/nestjs-rabbitmq';
-import { ConsumeMessage, MessagePropertyHeaders } from 'amqplib';
 import {
   ArgumentsHost,
   Catch,
   ExceptionFilter,
   UnprocessableEntityException,
 } from '@nestjs/common';
-
+import { NotFoundError } from '../../../core/shared/domain/errors/not-found.error';
+import { EntityValidationError } from '../../../core/shared/domain/validators/validation.error';
+import { AmqpConnection, Nack } from '@golevelup/nestjs-rabbitmq';
+import { ConsumeMessage, MessagePropertyHeaders } from 'amqplib';
 @Catch()
-export class RabbitmqConsumeErrorFilter<T> implements ExceptionFilter {
+export class RabbitmqConsumeErrorFilter implements ExceptionFilter {
   static readonly RETRY_COUNT_HEADER = 'x-retry-count';
-  static readonly MAX_RETRY_COUNT = 3;
+  static readonly MAX_RETRIES = 3;
+
   static readonly NON_RETRIABLE_ERRORS = [
     NotFoundError,
     EntityValidationError,
     UnprocessableEntityException,
   ];
-  static readonly RETRY_DELAY = 5000;
 
-  constructor(private readonly amqpConnection: AmqpConnection) {}
+  constructor(private amqpConnection: AmqpConnection) {}
 
   async catch(exception: Error, host: ArgumentsHost) {
     if (host.getType<'rmq'>() !== 'rmq') {
       return;
     }
 
-    const hasNonRetriableError =
+    const hasRetriableError =
       RabbitmqConsumeErrorFilter.NON_RETRIABLE_ERRORS.some(
         (error) => exception instanceof error,
       );
 
-    if (hasNonRetriableError) {
+    if (hasRetriableError) {
       return new Nack(false);
     }
 
@@ -50,8 +49,7 @@ export class RabbitmqConsumeErrorFilter<T> implements ExceptionFilter {
 
   private shouldRetry(messageHeaders: MessagePropertyHeaders): boolean {
     const retryHeader = RabbitmqConsumeErrorFilter.RETRY_COUNT_HEADER;
-    const maxRetries = RabbitmqConsumeErrorFilter.MAX_RETRY_COUNT;
-
+    const maxRetries = RabbitmqConsumeErrorFilter.MAX_RETRIES;
     return (
       !(retryHeader in messageHeaders) ||
       messageHeaders[retryHeader] < maxRetries
@@ -59,22 +57,22 @@ export class RabbitmqConsumeErrorFilter<T> implements ExceptionFilter {
   }
 
   private async retry(message: ConsumeMessage) {
-    const messageHeaders = message.properties.headers as MessagePropertyHeaders;
+    const messageHeaders = message.properties.headers;
     const retryHeader = RabbitmqConsumeErrorFilter.RETRY_COUNT_HEADER;
-    messageHeaders[retryHeader] = messageHeaders[retryHeader]
-      ? (messageHeaders[retryHeader] as number) + 1
+    messageHeaders![retryHeader] = messageHeaders![retryHeader]
+      ? messageHeaders![retryHeader] + 1
       : 1;
-    messageHeaders['x-delay'] = RabbitmqConsumeErrorFilter.RETRY_DELAY;
-    message.properties.headers = messageHeaders;
-    await this.amqpConnection.publish(
+    messageHeaders!['x-delay'] = 5000; //5s
+    return this.amqpConnection.publish(
       'direct.delayed',
       message.fields.routingKey,
       message.content,
       {
-        headers: messageHeaders,
         correlationId: message.properties.correlationId,
+        headers: messageHeaders,
       },
     );
-    return message;
   }
 }
+
+//http rabbitmq
