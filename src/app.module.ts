@@ -10,6 +10,7 @@ import { EventModule } from './nest-modules/event/event.module';
 import { UseCaseModule } from './nest-modules/usecase/usecase.module';
 import { RabbitMQFakeConsumer } from './nest-modules/rabbitmq-fake.consumer';
 import { RabbitmqModule } from './nest-modules/rabbitmq/rabbitmq.module';
+import { AuthModule } from './nest-modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { RabbitmqModule } from './nest-modules/rabbitmq/rabbitmq.module';
     //   uri: 'amqp://admin:admin@localhost:5672',
     // }),
     RabbitmqModule.forRoot(),
+    AuthModule,
   ],
   controllers: [],
   providers: [RabbitMQFakeConsumer],
