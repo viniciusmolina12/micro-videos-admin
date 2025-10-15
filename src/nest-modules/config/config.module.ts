@@ -79,6 +79,16 @@ export const RABBITMQ_SCHEMA: Joi.StrictSchemaMap<RABBITMQ_SCHEMA_TYPE> = {
   RABBITMQ_REGISTER_HANDLERS: Joi.boolean().required(),
 };
 
+type JWT_SCHEMA_TYPE = {
+  JWT_PUBLIC_KEY: string;
+  JWT_PRIVATE_KEY: string;
+};
+
+export const CONFIG_JWT_SCHEMA: Joi.StrictSchemaMap<JWT_SCHEMA_TYPE> = {
+  JWT_PUBLIC_KEY: Joi.string().required(),
+  JWT_PRIVATE_KEY: Joi.string().optional(),
+};
+
 export type CONFIG_SCHEMA_TYPE = DB_SCHEMA_TYPE &
   RABBITMQ_SCHEMA_TYPE &
   CONFIG_GOOGLE_SCHEMA_TYPE;
@@ -94,6 +104,7 @@ export class ConfigModule extends NestConfigModule {
         : [options.envFilePath]),
     ];
 
+    console.log(envFilePath);
     return super.forRoot({
       isGlobal: true,
       envFilePath: envFilePath as any,
@@ -101,6 +112,7 @@ export class ConfigModule extends NestConfigModule {
         ...CONFIG_DB_SCHEMA,
         ...CONFIG_GOOGLE_SCHEMA,
         ...RABBITMQ_SCHEMA,
+        ...CONFIG_JWT_SCHEMA,
       }),
       ...options,
     });
