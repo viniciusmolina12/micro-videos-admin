@@ -18,10 +18,7 @@ import { CreateCategoryUseCase } from '@core/category/application/usecases/creat
 import { UpdateCategoryUseCase } from '@core/category/application/usecases/update-category/update-category.usecase';
 import { DeleteCategoryUseCase } from '@core/category/application/usecases/delete-category/delete-category.usecase';
 import { GetCategoryUseCase } from '@core/category/application/usecases/get-category/get-category.usecase';
-import {
-  ListCategoriesInput,
-  ListCategoryUseCase,
-} from '@core/category/application/usecases/list-category/list-category.usecase';
+import { ListCategoryUseCase } from '@core/category/application/usecases/list-category/list-category.usecase';
 import {
   CategoryCollectionPresenter,
   CategoryPresenter,
