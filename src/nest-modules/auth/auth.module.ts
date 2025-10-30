@@ -1,12 +1,14 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthGuard } from './auth.guard';
 import { ConfigService } from '@nestjs/config';
 
+@Global()
 @Module({
   imports: [
     JwtModule.registerAsync({
+      global: true,
       useFactory: (configService: ConfigService) => ({
         publicKey: configService.get('JWT_PUBLIC_KEY'),
         privateKey: configService.get('JWT_PRIVATE_KEY'),
