@@ -57,3 +57,5 @@ pids
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 .docker
+micro-admin-typescript-470411-a74521f157cd.json
+micro_videos

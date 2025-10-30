@@ -1,5 +1,4 @@
-import { Controller, Get, Inject } from '@nestjs/common';
-import { FakeService } from './fake.service';
+import { Controller, Get } from '@nestjs/common';
 import { EventEmitter2 } from 'eventemitter2';
 
 @Controller('fake-event')
