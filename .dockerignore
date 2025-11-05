@@ -6,6 +6,7 @@ yarn-error.log*
 
 # Arquivos de desenvolvimento
 .git
+.github/
 .gitignore
 README.md
 .env
@@ -25,3 +26,21 @@ build/
 test/
 *.test.js
 *.spec.js
+
+.devcontainer/
+.docker/dbdata
+.docker/filebeatdata
+.docker/elk
+.docker/rabbitmq
+.docker/.gitignore
+coverage/
+envs/
+*.sqlite
+docker-compose*.yaml
+docker-compose*.yml
+micro-admin-typescript-470411-a74521f157cd.json
+create-rsa.js
+generate-token.js
+micro_videos/
+Dockerfile
+Dockerfile.prod
