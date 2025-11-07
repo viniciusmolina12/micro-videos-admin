@@ -1,29 +1,36 @@
 services:
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
     depends_on:
       - db
       - rabbitmq
+    volumes:
+      - ./envs:/home/node/app/envs
     labels:
       filebeat_collector: 'true'
     ports:
       - 3000:3000
+    restart: on-failure
 
   db:
     image: mysql:8.0.30-debian
     platform: linux/x86_64
+    tmpfs:
+      - /var/lib/mysql
     ports:
       - 3306:3306
     environment:
       - MYSQL_DATABASE=micro_videos
       - MYSQL_ROOT_PASSWORD=root
-    volumes:
-      - ./.docker/dbdata:/var/lib/mysql:delegated
     security_opt:
       - seccomp:unconfined
 
   rabbitmq:
     build: ./.docker/rabbitmq
+    tmpfs:
+      - /var/lib/rabbitmq
     ports:
       - 15672:15672
       - 5672:5672

@@ -1,31 +1,33 @@
-# FROM node:23.8-slim
-
-# USER node
-# COPY . .
-# WORKDIR /home/node/app
-
-# CMD ["tail", "-f", "/dev/null"]
-
 FROM node:23.8-slim
+
+RUN npm install -g @nestjs/cli@10.1.17
+
+USER node
 
 WORKDIR /home/node/app
 
-# Definir ambiente
-ENV NODE_ENV=development
+CMD ["tail", "-f", "/dev/null"]
 
-# Copiar apenas os arquivos de dependências primeiro
-COPY package.json yarn.lock ./
+# FROM node:23.8-slim
 
-# Instalar as dependências no container (garantindo arquitetura correta)
-RUN yarn install --frozen-lockfile
+# WORKDIR /home/node/app
 
-# Copiar o código fonte (node_modules será ignorado pelo .dockerignore)
-COPY . .
+# # Definir ambiente
+# ENV NODE_ENV=development
 
-# Ajustar permissões
-RUN chown -R node:node /home/node/app
+# # Copiar apenas os arquivos de dependências primeiro
+# COPY package.json yarn.lock ./
 
-# Mudar para usuário node
-USER node
+# # Instalar as dependências no container (garantindo arquitetura correta)
+# RUN yarn install --frozen-lockfile
 
-CMD ["yarn", "start"]
+# # Copiar o código fonte (node_modules será ignorado pelo .dockerignore)
+# COPY . .
+
+# # Ajustar permissões
+# RUN chown -R node:node /home/node/app
+
+# # Mudar para usuário node
+# USER node
+
+# CMD ["yarn", "start"]
