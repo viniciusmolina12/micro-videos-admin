@@ -30,8 +30,13 @@ export class Config {
 
   static readEnv() {
     if (Config.env) return;
-    Config.env = readEnv({
+    const { parsed } = readEnv({
       path: join(__dirname, `../../../../envs/.env.${process.env.NODE_ENV}`),
-    }).parsed;
+    });
+
+    Config.env = {
+      ...parsed,
+      ...process.env,
+    }
   }
 }

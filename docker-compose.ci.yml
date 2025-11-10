@@ -13,6 +13,9 @@ services:
     ports:
       - 3000:3000
     restart: on-failure
+    environment:
+      - GOOGLE_CLOUD_CREDENTIALS
+      - GOOGLE_CLOUD_STORAGE_BUCKET_NAME=
 
   db:
     image: mysql:8.0.30-debian

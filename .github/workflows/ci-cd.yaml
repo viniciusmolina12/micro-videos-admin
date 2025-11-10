@@ -73,12 +73,28 @@ jobs:
           target: development
 
       - name: Up containers
+        env:
+          GOOGLE_CLOUD_CREDENTIALS: ${{ secrets.GOOGLE_CLOUD_CREDENTIALS }}
+          GOOGLE_CLOUD_STORAGE_BUCKET_NAME: ${{ secrets.GOOGLE_CLOUD_STORAGE_BUCKET_NAME }}
         run: docker compose -f docker-compose.ci.yml up -d
 
       - name: Wait for mysql
         run: docker compose -f docker-compose.ci.yml exec -T db mysqladmin ping --silent --wait=30 -uroot -proot
 
-      # Sign the resulting Docker image digest except on PRs.
+      # TODO: Uncomment this when we fix the tests
+      # - name: generate
+      #   run: |
+      #       docker compose -f docker-compose.ci.yaml exec -u root -T app cp ./envs/.env.test.example ./envs/.env.test
+      #       docker compose -f docker-compose.ci.yaml exec -u root -T app cp ./envs/.env.e2e.example ./envs/.env.e2e
+
+      # - name: run unit and integration tests
+      #   run: docker compose -f docker-compose.ci.yaml exec -T app npm run test
+
+      # - name: run e2e tests
+      #   run: docker compose -f docker-compose.ci.yaml exec -T app npm run test:e2e -- --runInBand --detectOpenHandles --forceExit
+      # END TODO
+      
+      # Sign the resulting Docker image digest except on PRs. TODO: Uncomment this when we fix the tests
       # This will only write to the public Rekor transparency log when the Docker
       # repository is public to avoid leaking data.  If you would like to publish
       # transparency data even for private images, pass --force to cosign below.
